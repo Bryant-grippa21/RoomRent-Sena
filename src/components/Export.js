@@ -11,163 +11,158 @@ import client4 from "../assets/images/client4.png";
 import client5 from "../assets/images/client5.png";
 import client6 from "../assets/images/client6.png";
 import { MdNoteAlt } from "react-icons/md";
-import {
-  FaHome,
-  FaSearch,
-  FaNotesMedical,
-  FaCameraRetro,
-} from "react-icons/fa";
-import { GoLaw } from "react-icons/go";
+import { FaHome, FaSearch, FaCheckDouble, FaCameraRetro } from "react-icons/fa";
+import { GoPackage } from "react-icons/go";
 
 export const property = [
   {
     images: prop1,
-    address: "6Downtown, Las Vegas",
-    name: "Villa with Amazing View",
-    price: "$ 213.23",
+    address: "20 de Julio",
+    name: "Casa 2 pisos",
+    price: "$ 1.300.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Casa de dos pisos ubicada en una zona tranquila y segura, ideal para familias que buscan comodidad y espacio.",
     bed: 4,
     bath: 3,
-    area: "250 sq ft",
+    area: "75 metros",
     owner: "Alice adams",
   },
   {
     images: prop2,
-    address: "Meadows Village, Las Vegas",
-    name: "Townhouse for Sale",
-    price: "$ 345.18",
+    address: "Santa Lucia",
+    name: "Casa con parqueadero",
+    price: "$ 2.000.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Hermosa casa con parqueadero ubicada en una zona tranquila y segura, ideal para familias que buscan comodidad y espacio.",
     bed: 4,
     bath: 3,
-    area: "450 sq ft",
+    area: "60 metros",
     owner: "Drew Alice",
   },
   {
     images: prop3,
-    address: "49 DC townhall alex",
-    name: "Duplex sea facing for rent",
-    price: "$ 652.18",
+    address: "Teusaquillo",
+    name: "Apartamento amplio",
+    price: "$ 1.000.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Hermoso apartamento amplio ubicado en una zona tranquila y segura, ideal para familias que buscan comodidad y espacio.",
     bed: 4,
     bath: 3,
-    area: "129 sq ft",
+    area: "60 metros",
     owner: "Fursi Bam",
   },
   {
     images: prop4,
-    address: "Underground street 20 texax",
-    name: "Villa with Side View",
-    price: "$ 876.13",
+    address: "Galerias",
+    name: "Apartamento moderno",
+    price: "$ 950.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Hermoso apartamento moderno ubicado en una zona tranquila y segura, ideal para familias que buscan comodidad y espacio.",
     bed: 4,
     bath: 3,
-    area: "453 sq ft",
+    area: "53 metros",
     owner: "Neon Alice",
   },
   {
     images: prop5,
-    address: "Rubari London Hills",
-    name: "Awesome villa for rent",
-    price: "$ 341.83",
+    address: "Bosa-naranjos",
+    name: "Apartamento en conjunto cerrado",
+    price: "$ 1.000.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Apartamento en conjunto cerrado ubicado en una zona tranquila y segura.",
     bed: 4,
     bath: 3,
-    area: "320 sq ft",
+    area: "52 metros",
     owner: "Firari Alice",
   },
   {
     images: prop6,
-    address: "Northean fersh alice",
-    name: "Street Farm for sale",
-    price: "$ 675.23",
+    address: "Villa del Prado",
+    name: "Habitacion amoblada",
+    price: "$ 650.000",
     about:
-      "Beautiful, updated, ground level Co-op apartment in the desirable Bay Terrace neighborhood",
+      "Hermosa habitacion amoblada ubicada en una zona tranquila y segura, ideal para familias que buscan comodidad y espacio.",
     bed: 4,
     bath: 3,
-    area: "340 sq ft",
+    area: "10 metros",
     owner: "Jordan Bram",
   },
 ];
 
-export const service = [
+export const Service = [
   {
     icon: MdNoteAlt,
-    title: "Sell your home",
-    desc: "We sell your home at the best market price",
+    title: "Arrienda fácil, arrienda seguro",
+    desc: "Simplificamos el proceso para que disfrutes de un arriendo sin sorpresas.",
   },
   {
     icon: FaHome,
-    title: "Home loans",
-    desc: "We offer you free consultancy to get a loan",
+    title: "Confianza para Propietarios y Arrendatarios",
+    desc: "Unimos hogares confiables con personas confiables.",
   },
   {
-    icon: GoLaw,
-    title: "Legal services",
-    desc: "Expert legal help for all related property items",
+    icon: GoPackage,
+    title: "Tu match perfecto en vivienda",
+    desc: "Donde tus necesidades encuentran su espacio.",
   },
   {
     icon: FaSearch,
-    title: "Home inspection",
-    desc: "We make sure you get what you were promised",
+    title: "Home Check",
+    desc: "Tu decisión, respaldada por datos reales",
   },
   {
-    icon: FaNotesMedical,
-    title: "Evaluation",
-    desc: "We offer you free evaluation to get a mortgage loan",
+    icon: FaCheckDouble,
+    title: "Evaluaciones & Opiniones",
+    desc: "Opiniones reales para decisiones más seguras.",
   },
   {
     icon: FaCameraRetro,
-    title: "Photoshoot",
-    desc: "We prepare your home visual presentation",
+    title: "Recorrido Visual",
+    desc: "Fotografías que muestran exactamente lo que encontrarás.",
   },
 ];
 
-export const client = [
+export const Client = [
   {
     image: client1,
-    name: "Dana Gilmore",
-    text: "Excellent team!",
+    name: "Camilo Ramirez",
+    text: "Proceso de arriendo transparente",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Soy arrendatario y lo que más me gustó fue la claridad en cada paso. Desde la búsqueda hasta la firma del contrato, todo estuvo bien explicado y sin sorpresas. Me dio mucha confianza.",
   },
   {
     image: client2,
     name: "Ana Anderson",
-    text: "Very good work",
+    text: "Excelente comunicación",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Me encantó la comunicación constante con los interesados. La plataforma me permitió responder dudas fácilmente y mantener todo organizado sin perder información.",
   },
   {
     image: client3,
-    name: "Albert adame",
-    text: "Very well",
+    name: "Martha Lopez",
+    text: "Variedad de opciones",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Buscaba un apartamento en una zona específica y encontré varias alternativas que se ajustaban a mi presupuesto. La variedad de inmuebles disponibles me facilitó tomar la mejor decisión.",
   },
   {
     image: client4,
-    name: "Dana Gilmore",
-    text: "Excellent team!",
+    name: "Dario Montez",
+    text: "Seguridad en los pagos",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Como propietario, lo que más valoro es la seguridad en las transacciones. Los pagos de arriendo llegan puntuales y con respaldo, lo que me da tranquilidad total.",
   },
   {
     image: client5,
-    name: "Alex gilmore",
-    text: "Excellent team!",
+    name: "Alex Garcia",
+    text: "Facilidad para encontrar inquilinos",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Me preocupaba el tiempo que tardaba en arrendar mi apartamento. Con esta plataforma logré encontrar inquilinos confiables en menos de una semana. Todo el proceso fue rápido y seguro.",
   },
   {
     image: client6,
-    name: "Sivay Ashbi",
-    text: "Excellent team!",
+    name: "Leonor Martinez",
+    text: "Atención personalizada",
     feedback:
-      "The WP Estate team did an outstanding job helping me buy my first home. The high level of service and dedication",
+      "Soy arrendatario y me sorprendió la atención que recibí. Me ayudaron a resolver dudas sobre el contrato y me guiaron en todo el proceso. Sentí que realmente se preocupaban por mi experiencia.",
   },
 ];
