@@ -1,5 +1,5 @@
 import React from "react";
-import { useDarkMode } from "./DarkModeContext";
+import useDarkMode from './useDarkMode';
 import {
   FaFacebookF,
   FaThreads,
@@ -24,9 +24,8 @@ const Footer = () => {
   return (
     <>
       <footer
-        className={`${
-          darkMode ? "dark bg-black" : "light bg-gray-800"
-        } w-full m-auto lg:px-20 px-10 py-20 grid lg:grid-cols-3 grid-cols-1 justify-center items-start lg:gap-20 gap-10`}
+        className={`${darkMode ? "dark bg-[#65727c]" : "light bg-gray-800"
+          } w-full m-auto lg:px-20 px-10 py-20 grid lg:grid-cols-3 grid-cols-1 justify-center items-start lg:gap-20 gap-10`}
       >
         <div className="flex flex-col justify-center items-start gap-5">
           <h1 className="text-white text-2xl font-semibold">
@@ -38,19 +37,19 @@ const Footer = () => {
             comunidad y mantente al día con lo mejor del mundo inmobiliario.
           </p>
           <div id="social-icons" className="flex justify-start items-center gap-4 mt-4">
-            <div className="p-3 rounded-xl bg-white hover:bg-red-600 hover:text-white cursor-pointer transform hover:scale-110 transition-transform duration-300">
+            <div className="p-3 rounded-xl bg-white hover:bg-[#71bfd1] hover:text-black cursor-pointer transform hover:scale-110 transition-transform duration-300">
               <FaFacebookF className="size-5" />
             </div>
-            <div className="p-3 rounded-xl bg-white hover:bg-red-600 hover:text-white cursor-pointer transform hover:scale-110 transition-transform duration-300">
+            <div className="p-3 rounded-xl bg-white hover:bg-[#71bfd1] hover:text-black cursor-pointer transform hover:scale-110 transition-transform duration-300">
               <FaInstagram className="size-5" />
             </div>
-            <div className="p-3 rounded-xl bg-white hover:bg-red-600 hover:text-white cursor-pointer transform hover:scale-110 transition-transform duration-300">
+            <div className="p-3 rounded-xl bg-white hover:bg-[#71bfd1] hover:text-black  cursor-pointer transform hover:scale-110 transition-transform duration-300">
               <FaXTwitter className="size-5" />
             </div>
-            <div className="p-3 rounded-xl bg-white hover:bg-red-600 hover:text-white cursor-pointer transform hover:scale-110 transition-transform duration-300">
+            <div className="p-3 rounded-xl bg-white hover:bg-[#71bfd1] hover:text-black cursor-pointer transform hover:scale-110 transition-transform duration-300">
               <FaYoutube className="size-5" />
             </div>
-            <div className="p-3 rounded-xl bg-white hover:bg-red-600 hover:text-white cursor-pointer transform hover:scale-110 transition-transform duration-300">
+            <div className="p-3 rounded-xl bg-white hover:bg-[#71bfd1] hover:text-black cursor-pointer transform hover:scale-110 transition-transform duration-300">
               <FaThreads className="size-5" />
             </div>
           </div>
@@ -75,17 +74,37 @@ const Footer = () => {
             <p className="text-slate-200">Santiago Basto</p>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5">  
+        <div className="flex flex-col justify-center items-center gap-5">
           <div>
             <img src={sena} alt="Sena Logo" className="w-[150px] rounded-lg transform hover:scale-110 cursor-pointer transition-transform duration-300" />
-            
+
           </div>
           <h1 className="text-white text-2xl font-semibold">Servicio Nacional de Aprendizaje (SENA)</h1>
           <p className="text-white text- font-semibold">Ficha:3311941 <br />Tecnologo en analisis y desarrollo de software</p>
         </div>
       </footer>
+      {/* top button */}
+      <div id="icon-box" className="bg-[#a7bcf7] p-3 rounded-full hover:bg-[#0b2236] cursor-pointer fixed lg:bottom-12 bottom-6 right-6 border">
+        <Link to="home" spy={true} offset={-100} smooth={true}>
+          <FaArrowUp className="size-6 text-white" />
+        </Link>
+      </div>
+      {/* dark mode button */}
+      <div>
+  <button
+    onClick={toggleDarkMode}
+    className="flex items-center p-3 rounded-full bg-[#a7bcf7] hover:bg-[#0b2236] fixed lg:bottom-40 right-6 bottom-6 border "
+  >
+    {darkMode ? (
+      <FaMoon size={25} className="text-white" />   
+    ) : (
+      <FaSun size={24} className="text-white" />   
+    )}
+  </button>
+</div>
     </>
   );
+
 };
 
 export default Footer;

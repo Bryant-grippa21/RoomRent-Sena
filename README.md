@@ -30,6 +30,8 @@ cd roomrent
 Instalación de dependencias
 
 npm install
+npm install @tailwindcss/vite --save-dev
+npm install react-router-dom
 
 Ejecutar en modo desarrollo
 

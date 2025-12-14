@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDarkMode } from "../components/DarkModeContext";
+import useDarkMode from "../components/useDarkMode";
 import area1 from "../assets/images/House.jpg";
 import area2 from "../assets/images/Apartment.jpg";
 import area3 from "../assets/images/Room.jpeg";
@@ -16,13 +16,13 @@ const PopularAreas = () => {
     });
   }, []);
 
-  const { darkMode, toggleDarkMode } = useDarkMode();
+  const { darkMode } = useDarkMode();
 
   return (
     <div className={`${darkMode ? "dark bg-black" : "light bg-transparent"}`}>
       <section
         className={`${
-          darkMode ? "dark bg-gray-800" : "light bg-red-100"
+          darkMode ? "dark bg-[#65727c]" : "light bg-[#cadffb]"
         } lg:w-[90%] w-full h-fit m-auto bg-cover bg-center rounded-xl flex justify-center flex-col items-center lg:px-20 px-6 py-20 gap-20`}
       >
         <div
@@ -30,7 +30,7 @@ const PopularAreas = () => {
           className="w-full grid lg:grid-cols-3 grid-cols-1 justify-center items-center gap-8"
         >
           <div>
-            <h1 data-aos="zoom-in" className="text-red-500 dark:text-white">
+            <h1 data-aos="zoom-in" className="text-[#2d2c55] dark:text-white font-semibold">
               TIPOS DE ARRIENDO
             </h1>
             <h1
@@ -47,19 +47,25 @@ const PopularAreas = () => {
               data-aos-delay="400"
               style={{ backgroundImage: `url(${area1})` }}
               className="h-[300px] bg-cover bg-center rounded-xl transform transition-transform duration-500 hover:scale-110"
-            ></div>
+            >
+              <h1 className="px-3 py-1 bg-[#517399] text-white rounded-full text-[15px] text-center">CASAS</h1>
+            </div>
             <div
               data-aos="zoom-in"
               data-aos-delay="500"
               style={{ backgroundImage: `url(${area2})` }}
               className="h-[300px] bg-cover bg-center rounded-xl transform transition-transform duration-500 hover:scale-110"
-            ></div>
+            >
+              <h1 className="px-3 py-1 bg-[#517399] text-white rounded-full text-[15px] text-center">APARTAMENTOS</h1>
+            </div>
             <div
               data-aos="zoom-in"
               data-aos-delay="600"
               style={{ backgroundImage: `url(${area3})` }}
               className="h-[300px] bg-cover bg-center rounded-xl transform transition-transform duration-500 hover:scale-110"
-            ></div>
+            >
+              <h1  className="px-3 py-1 bg-[#517399] text-white rounded-full text-[15px] text-center">HABITACIONES</h1>
+            </div>
           </div>
         </div>
         <div
@@ -71,7 +77,7 @@ const PopularAreas = () => {
             data-aos-delay="200"
             className="flex justify-center lg:items-center gap-8 w-full"
           >
-            <h1 className="text-black text-7xl font-semibold dark:text-white">
+            <h1 className="text-black text-5xl font-semibold dark:text-white">
               5K
             </h1>
             <h1>
@@ -83,7 +89,7 @@ const PopularAreas = () => {
             data-aos-delay="200"
             className="flex justify-center lg:items-center gap-8 w-full"
           >
-            <h1 className="text-black text-7xl font-semibold dark:text-white">
+            <h1 className="text-black text-5xl font-semibold dark:text-white">
               +1K
             </h1>
             <h1>
@@ -95,7 +101,7 @@ const PopularAreas = () => {
             data-aos-delay="200"
             className="flex justify-center lg:items-center gap-8 w-full"
           >
-            <h1 className="text-black text-7xl font-semibold dark:text-white">
+            <h1 className="text-black text-5xl font-semibold dark:text-white">
               +800
             </h1>
             <h1>
