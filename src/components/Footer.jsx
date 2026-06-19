@@ -18,74 +18,74 @@ const authors = ["Ronal Cucariano", "Briant Grippa", "Jose Bohorquez", "Santiago
 export default function Footer() {
   return (
     <>
-      <footer className="bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <footer className="bg-stone-950 dark:bg-zinc-950 border-t border-white/5">
+        <div className="container-page py-14 grid grid-cols-1 md:grid-cols-3 gap-10">
 
-          {/* Columna 1 — Redes */}
+          {/* Redes */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-white text-base font-semibold">¡Conéctate con nosotros!</h2>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Síguenos en redes y descubre tips, novedades y oportunidades
-              de arriendo. Únete a nuestra comunidad.
+            <h2 className="text-white text-sm font-bold uppercase tracking-wider">Síguenos</h2>
+            <p className="text-stone-400 text-sm leading-relaxed">
+              Tips, novedades y oportunidades de arriendo en nuestras redes.
             </p>
             <div className="flex gap-2 mt-1">
               {socialLinks.map(({ icon: Icon, label }) => (
                 <button
                   key={label}
                   aria-label={label}
-                  className="p-2.5 rounded-lg bg-slate-800 text-slate-400
-                             hover:bg-brand-600 hover:text-white
+                  className="w-9 h-9 rounded-lg bg-white/[0.06] text-stone-400
+                             hover:bg-brand-700 hover:text-white
+                             flex items-center justify-center
                              transition-colors duration-150"
                 >
                   <Icon className="size-3.5" />
                 </button>
               ))}
             </div>
-            <p className="text-slate-600 text-xs mt-3">© 2025 RoomRent. Todos los derechos reservados.</p>
+            <p className="text-stone-600 text-xs mt-2">© 2025 RoomRent. Todos los derechos reservados.</p>
           </div>
 
-          {/* Columna 2 — Equipo */}
+          {/* Equipo */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-white text-base font-semibold">Creado por</h2>
+            <h2 className="text-white text-sm font-bold uppercase tracking-wider">Equipo</h2>
             <ul className="flex flex-col gap-2.5">
               {authors.map((name) => (
-                <li key={name} className="flex items-center gap-2.5 text-slate-400 text-sm">
-                  <FaFireFlameCurved className="size-3.5 text-brand-400 flex-shrink-0" />
+                <li key={name} className="flex items-center gap-2.5 text-stone-400 text-sm">
+                  <FaFireFlameCurved className="size-3.5 text-brand-500 flex-shrink-0" />
                   {name}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Columna 3 — SENA */}
+          {/* SENA */}
           <div className="flex flex-col items-start md:items-center gap-4">
             <img
               src={sena}
               alt="SENA"
-              className="w-28 rounded-lg opacity-80 hover:opacity-100 transition-opacity"
+              className="w-24 rounded-lg opacity-70 hover:opacity-100 transition-opacity"
             />
             <div className="md:text-center">
-              <p className="text-white font-semibold text-sm">Servicio Nacional de Aprendizaje</p>
-              <p className="text-slate-400 text-sm mt-0.5">Ficha: 3311941</p>
-              <p className="text-slate-500 text-xs mt-0.5">Tecnólogo en ADSO</p>
+              <p className="text-white text-sm font-semibold">Servicio Nacional de Aprendizaje</p>
+              <p className="text-stone-400 text-xs mt-0.5">Ficha 3311941 · Tecnólogo ADSO</p>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* FAB — scroll to top */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Link to="home" spy smooth offset={-72}>
-          <button
-            aria-label="Volver arriba"
-            className="p-3 rounded-full bg-brand-600 hover:bg-brand-700 text-white
-                       shadow-lg hover:shadow-brand-600/25
-                       transition-all duration-150"
-          >
-            <FaArrowUp className="size-4" />
-          </button>
-        </Link>
-      </div>
+      {/* FAB */}
+      <Link to="home" spy smooth offset={-72}>
+        <button
+          aria-label="Volver arriba"
+          className="fixed bottom-6 right-6 z-50
+                     w-11 h-11 rounded-full
+                     bg-brand-700 hover:bg-brand-800 text-white
+                     shadow-lg shadow-brand-900/40
+                     flex items-center justify-center
+                     transition-all duration-150"
+        >
+          <FaArrowUp className="size-4" />
+        </button>
+      </Link>
     </>
   );
 }

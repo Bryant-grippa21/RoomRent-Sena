@@ -1,20 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  FaBath, FaBed, FaShareAlt, FaHeart, FaPlus, FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaBath, FaBed, FaMapMarkerAlt } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import { FaUserCircle } from "react-icons/fa";
 import { inmuebleApi } from "../services/api";
 
 function SkeletonCard() {
   return (
     <div className="card overflow-hidden animate-pulse">
-      <div className="h-52 bg-slate-200 dark:bg-slate-700" />
+      <div className="h-52 bg-stone-200 dark:bg-zinc-700" />
       <div className="p-5 space-y-3">
-        <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-2/3" />
-        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full" />
-        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3" />
+        <div className="h-3 bg-stone-200 dark:bg-zinc-700 rounded w-2/3" />
+        <div className="h-5 bg-stone-200 dark:bg-zinc-700 rounded w-1/3" />
+        <div className="h-3 bg-stone-200 dark:bg-zinc-700 rounded w-full" />
       </div>
     </div>
   );
@@ -26,30 +23,27 @@ export default function Properties() {
   const locationHook = useLocation();
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetch = async () => {
       setLoading(true);
       try {
         const params = new URLSearchParams(locationHook.search);
         const data = await inmuebleApi.getAll(params.toString());
         setProperties(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error cargando propiedades:", err);
+      } catch {
         setProperties([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchProperties();
+    fetch();
   }, [locationHook.search]);
 
   return (
     <div className="bg-surface-light dark:bg-surface-dark min-h-screen">
-      <section
-        id="properties"
-        className="container-page py-16"
-      >
-        <div className="flex flex-col gap-1.5 mb-10">
-          <p className="section-label">Propiedades</p>
+      <section id="properties" className="container-page py-16">
+
+        <div className="flex flex-col gap-1.5 mb-12">
+          <p className="section-label">Inmuebles</p>
           <h1 className="section-title">Explora los inmuebles disponibles</h1>
         </div>
 
@@ -58,9 +52,9 @@ export default function Properties() {
             {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : properties.length === 0 ? (
-          <div className="text-center py-20">
+          <div className="text-center py-24">
             <p className="text-5xl mb-4">🔍</p>
-            <p className="text-slate-500 dark:text-slate-400 text-lg">
+            <p className="text-stone-500 dark:text-zinc-400 text-lg">
               No se encontraron propiedades con esos filtros.
             </p>
           </div>
@@ -74,75 +68,60 @@ export default function Properties() {
               >
                 {/* Imagen */}
                 <div
-                  className="relative h-52 bg-cover bg-center overflow-hidden"
-                  style={{ backgroundImage: `url(${item.images?.[0]})` }}
+                  className="relative h-52 overflow-hidden"
+                  style={{
+                    background: item.images?.[0]
+                      ? `url(${item.images[0]}) center/cover`
+                      : "linear-gradient(135deg, #f5f5f4, #e7e5e4)"
+                  }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-stone-950/10 to-transparent" />
                   <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-1 bg-brand-600 text-white text-xs font-semibold rounded-md">
+                    <span className="px-2.5 py-1 bg-brand-700 text-white text-xs font-bold rounded-md">
                       {item.type || "Inmueble"}
                     </span>
                   </div>
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-                    <FaMapMarkerAlt className="size-3 text-white/80" />
-                    <span className="text-white text-xs">{item.address}</span>
-                  </div>
+                  {item.address && (
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+                      <FaMapMarkerAlt className="size-3 text-white/70" />
+                      <span className="text-white text-xs truncate max-w-[160px]">{item.address}</span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Info */}
-                <div className="p-5 flex flex-col gap-2">
-                  <h2 className="font-bold text-slate-900 dark:text-white text-sm line-clamp-1">
+                {/* Contenido */}
+                <div className="p-5 flex flex-col gap-3">
+                  <h2 className="font-bold text-stone-900 dark:text-white text-sm line-clamp-1">
                     {item.title}
                   </h2>
-                  <p className="text-brand-600 dark:text-brand-400 font-bold text-xl">
+                  <p className="text-brand-700 dark:text-brand-500 font-extrabold text-xl leading-none">
                     ${item.price?.toLocaleString()}
+                    <span className="text-xs font-normal text-stone-400 dark:text-zinc-500 ml-1">/mes</span>
                   </p>
+
                   {item.about && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                    <p className="text-xs text-stone-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
                       {item.about}
                     </p>
                   )}
 
-                  {/* Detalles */}
-                  <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 pt-3
-                                  border-t border-slate-100 dark:border-slate-700 mt-1">
+                  <div className="flex gap-4 text-xs text-stone-500 dark:text-zinc-400 pt-3
+                                  border-t border-stone-100 dark:border-zinc-700">
                     {item.bath != null && (
                       <span className="flex items-center gap-1.5">
-                        <FaBath className="size-3.5 text-brand-500 dark:text-brand-400" /> {item.bath}
+                        <FaBath className="size-3.5 text-brand-600 dark:text-brand-500" /> {item.bath} baños
                       </span>
                     )}
                     {item.bed != null && (
                       <span className="flex items-center gap-1.5">
-                        <FaBed className="size-3.5 text-brand-500 dark:text-brand-400" /> {item.bed}
+                        <FaBed className="size-3.5 text-brand-600 dark:text-brand-500" /> {item.bed} hab.
                       </span>
                     )}
                     {item.area && (
                       <span className="flex items-center gap-1.5">
-                        <MdSpaceDashboard className="size-3.5 text-brand-500 dark:text-brand-400" /> {item.area}
+                        <MdSpaceDashboard className="size-3.5 text-brand-600 dark:text-brand-500" /> {item.area} m²
                       </span>
                     )}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
-                      <FaUserCircle className="size-3.5 text-brand-400" /> {item.owner}
-                    </span>
-                    <div className="flex gap-1">
-                      {[FaShareAlt, FaHeart, FaPlus].map((Icon, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={(e) => e.preventDefault()}
-                          className="p-1.5 rounded-md border border-slate-200 dark:border-slate-700
-                                     text-slate-400 hover:text-brand-600 hover:border-brand-300
-                                     dark:hover:text-brand-400 dark:hover:border-brand-700
-                                     transition-colors duration-150"
-                        >
-                          <Icon className="size-3" />
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </div>
               </Link>

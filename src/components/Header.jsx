@@ -15,18 +15,6 @@ const navItems = [
   { label: "Contacto",     path: "contact",      type: "scroll" },
 ];
 
-const linkCls =
-  "text-sm font-medium px-3 py-2 rounded-md " +
-  "text-slate-600 dark:text-slate-300 " +
-  "hover:text-brand-600 dark:hover:text-brand-400 " +
-  "hover:bg-brand-50 dark:hover:bg-slate-800 " +
-  "transition-colors duration-150 cursor-pointer";
-
-const mobileLinkCls =
-  "block text-sm font-medium px-3 py-2.5 rounded-md " +
-  "text-slate-200 hover:text-white hover:bg-slate-700 " +
-  "transition-colors duration-150 cursor-pointer";
-
 export default function Header() {
   const { darkMode, toggleDarkMode } = useDarkMode();
   const { user, logout } = useAuth();
@@ -40,6 +28,18 @@ export default function Header() {
     navigate("/");
     setMenuOpen(false);
   };
+
+  const linkCls =
+    "text-sm font-medium px-3 py-2 rounded-md " +
+    "text-stone-600 dark:text-zinc-400 " +
+    "hover:text-stone-900 dark:hover:text-white " +
+    "hover:bg-stone-100 dark:hover:bg-zinc-800 " +
+    "transition-colors duration-150 cursor-pointer";
+
+  const mobileLinkCls =
+    "block text-sm font-medium px-4 py-3 rounded-md " +
+    "text-zinc-300 hover:text-white hover:bg-zinc-800 " +
+    "transition-colors duration-150 cursor-pointer";
 
   const renderItem = ({ label, path, type }, mobile = false) => {
     const cls = mobile ? mobileLinkCls : linkCls;
@@ -63,85 +63,87 @@ export default function Header() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-nav-light dark:bg-nav-dark border-b border-slate-200/80 dark:border-slate-700/60 shadow-sm backdrop-blur-sm bg-white/95 dark:bg-slate-900/95">
+    <nav className="sticky top-0 z-40
+                    bg-white/95 dark:bg-zinc-900/95
+                    backdrop-blur-sm
+                    border-b border-stone-200 dark:border-zinc-800
+                    shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <RouterLink to="/" className="flex-shrink-0 flex items-center gap-2">
+          <RouterLink to="/" className="flex items-center gap-2.5 flex-shrink-0">
             <img src={logo} alt="RoomRent" className="h-8 w-auto dark:invert" />
+            <span className="hidden sm:block text-sm font-bold text-stone-800 dark:text-white tracking-tight">
+              RoomRent
+            </span>
           </RouterLink>
 
           {/* Nav desktop */}
-          <ul className="hidden lg:flex items-center gap-0.5">
+          <div className="hidden lg:flex items-center gap-0.5">
             {navItems.map((item) => renderItem(item))}
-          </ul>
+          </div>
 
           {/* Acciones desktop */}
           <div className="hidden lg:flex items-center gap-2">
             <button
               onClick={toggleDarkMode}
               aria-label="Cambiar modo"
-              className="p-2 rounded-md text-slate-500 dark:text-slate-400
-                         hover:text-slate-700 dark:hover:text-slate-200
-                         hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-md text-stone-500 dark:text-zinc-400
+                         hover:text-stone-700 dark:hover:text-white
+                         hover:bg-stone-100 dark:hover:bg-zinc-800
+                         transition-colors duration-150"
             >
-              {darkMode ? <FaSun size={17} /> : <FaMoon size={17} />}
+              {darkMode ? <FaSun size={16} /> : <FaMoon size={16} />}
             </button>
 
             {user ? (
-              <div className="flex items-center gap-2 ml-1">
-                <span className="text-xs text-slate-500 dark:text-slate-400 max-w-[110px] truncate">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-medium text-stone-500 dark:text-zinc-400 max-w-[100px] truncate">
                   {user.firstName || user.login}
                 </span>
-                <button onClick={handleLogout} className="btn-danger">
-                  Salir
-                </button>
+                <button onClick={handleLogout} className="btn-danger">Salir</button>
               </div>
             ) : (
-              <RouterLink to="/login" className="btn-primary ml-1">
+              <RouterLink to="/login" className="btn-primary">
                 Iniciar sesión
               </RouterLink>
             )}
           </div>
 
-          {/* Mobile: dark toggle + hamburger */}
+          {/* Mobile */}
           <div className="flex lg:hidden items-center gap-1">
             <button
               onClick={toggleDarkMode}
               aria-label="Cambiar modo"
-              className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-md text-stone-500 dark:text-zinc-400 hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              {darkMode ? <FaSun size={17} /> : <FaMoon size={17} />}
+              {darkMode ? <FaSun size={16} /> : <FaMoon size={16} />}
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Menú"
-              className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-md text-stone-500 dark:text-zinc-400 hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              {menuOpen ? <FaXmark size={19} /> : <FaBars size={19} />}
+              {menuOpen ? <FaXmark size={18} /> : <FaBars size={18} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu — dark siempre para mantener coherencia */}
+      {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-slate-900 border-t border-slate-700">
+        <div className="lg:hidden bg-zinc-900 border-t border-zinc-800">
           <div className="px-3 py-3 flex flex-col gap-0.5">
             {navItems.map((item) => renderItem(item, true))}
-            <div className="mt-2 pt-2 border-t border-slate-700">
+            <div className="mt-3 pt-3 border-t border-zinc-800">
               {user ? (
-                <div className="flex items-center justify-between gap-3 px-1">
-                  <span className="text-xs text-slate-400 truncate">{user.firstName || user.login}</span>
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-xs text-zinc-400 truncate">{user.firstName || user.login}</span>
                   <button onClick={handleLogout} className="btn-danger">Salir</button>
                 </div>
               ) : (
-                <RouterLink
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="btn-primary w-full justify-center"
-                >
+                <RouterLink to="/login" onClick={() => setMenuOpen(false)} className="btn-primary w-full justify-center">
                   Iniciar sesión
                 </RouterLink>
               )}

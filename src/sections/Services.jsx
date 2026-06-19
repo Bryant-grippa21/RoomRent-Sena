@@ -2,16 +2,23 @@ import { services } from "../data/services";
 
 export default function Services() {
   return (
+    /* Sección oscura — contraste fuerte que rompe el ritmo visual */
     <section
       id="services"
-      className="bg-white dark:bg-slate-800/40 w-full px-4 sm:px-6 lg:px-8 py-20"
+      className="bg-stone-950 dark:bg-zinc-950 w-full py-24"
     >
-      <div className="max-w-7xl mx-auto flex flex-col gap-12">
-        <div className="flex flex-col gap-3 max-w-xl">
-          <p data-aos="fade-up" className="section-label">Nuestros servicios</p>
-          <h2 data-aos="fade-up" data-aos-delay="100" className="section-title">
+      <div className="container-page flex flex-col gap-14">
+
+        <div className="flex flex-col gap-4 max-w-xl">
+          <p data-aos="fade-up" className="text-xs font-bold tracking-[0.14em] uppercase text-brand-500">
+            Nuestros servicios
+          </p>
+          <h2 data-aos="fade-up" data-aos-delay="80" className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
             Los mejores servicios para ti
           </h2>
+          <p data-aos="fade-up" data-aos-delay="160" className="text-stone-400 leading-relaxed">
+            Diseñados para hacer el proceso de arriendo más simple, seguro y transparente.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,27 +27,22 @@ export default function Services() {
               key={index}
               data-aos="fade-up"
               data-aos-delay={index * 80}
-              className="group card card-hover px-7 py-8 flex flex-col gap-4
-                         hover:bg-brand-600 dark:hover:bg-brand-700 cursor-pointer"
+              className="group bg-white/[0.04] hover:bg-brand-700
+                         border border-white/10 hover:border-brand-600
+                         rounded-xl px-7 py-8 flex flex-col gap-5
+                         transition-all duration-200 cursor-pointer"
             >
-              <div className="p-3 rounded-lg bg-brand-50 dark:bg-brand-900/30 w-fit
-                              group-hover:bg-white/15 transition-colors duration-200">
-                <service.icon className="text-brand-600 dark:text-brand-400 size-7
-                                         group-hover:text-white" />
+              <div className="p-3 rounded-lg bg-white/[0.07] group-hover:bg-white/15 w-fit transition-colors duration-200">
+                <service.icon className="size-7 text-brand-400 group-hover:text-white transition-colors" />
               </div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-white
-                             group-hover:text-white">
+              <h3 className="font-semibold text-white text-base leading-snug">
                 {service.title}
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed
-                            group-hover:text-white/85">
+              <p className="text-sm text-stone-400 group-hover:text-white/80 leading-relaxed transition-colors">
                 {service.desc}
               </p>
-              <span className="text-sm font-semibold text-brand-600 dark:text-brand-400
-                               group-hover:text-white/90 w-fit mt-auto
-                               border-b border-brand-200 dark:border-brand-700
-                               group-hover:border-white/40 pb-0.5 transition-colors duration-200">
-                Leer más
+              <span className="text-xs font-semibold text-brand-400 group-hover:text-white/80 uppercase tracking-wider w-fit mt-auto transition-colors">
+                Leer más →
               </span>
             </div>
           ))}
