@@ -1,213 +1,153 @@
-import React, { useEffect } from "react";
-import useDarkMode from "../components/useDarkMode";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaBath,
-  FaShareAlt,
-  FaBed,
-  FaUserCircle,
-  FaPlus,
-  FaMapMarkerAlt,
-  FaVideo,
-  FaCamera,
-  FaHeart,
+  FaBath, FaBed, FaShareAlt, FaHeart, FaPlus, FaMapMarkerAlt,
 } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { FaUserCircle } from "react-icons/fa";
+import { inmuebleApi } from "../services/api";
 
-const Properties = () => {
-  const [loading, setLoading] = useState(true);
-  const locationHook = useLocation();
-  const [properties, setProperties] = useState([]);
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        setLoading(true);
-        const params = new URLSearchParams(locationHook.search);
-
-        const location = params.get("location");
-        const type = params.get("type");
-        const price = params.get("price");
-
-        let minPrice, maxPrice;
-
-        if (price) {
-          const [min, max] = price.split("-");
-          minPrice = min;
-          maxPrice = max;
-        }
-
-        const response = await fetch(
-          `http://localhost:5000/api/properties?location=${location || ""}&type=${type || ""}&minPrice=${minPrice || ""}&maxPrice=${maxPrice || ""}`,
-        );
-        
-        const data = await response.json();
-
-        console.log("DATA REAL:", data);
-        setProperties(data);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-      setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, [locationHook.search]);
-
-  if (loading) {
+function SkeletonCard() {
   return (
-    <div className="grid lg:grid-cols-3 gap-8 p-10">
-      {[1,2,3,4,5,6].map((i) => (
-        <div key={i} className="rounded-xl overflow-hidden">
-          <div className="h-[200px] bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-          <div className="p-4 space-y-2">
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse w-3/4"></div>
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse w-1/2"></div>
-          </div>
-        </div>
-      ))}
+    <div className="card overflow-hidden animate-pulse">
+      <div className="h-56 bg-gray-200 dark:bg-gray-700" />
+      <div className="p-5 space-y-3">
+        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+      </div>
     </div>
   );
 }
-  const { darkMode } = useDarkMode();
+
+export default function Properties() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const locationHook = useLocation();
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams(locationHook.search);
+        const data = await inmuebleApi.getAll(params.toString());
+        setProperties(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error cargando propiedades:", err);
+        setProperties([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, [locationHook.search]);
+
   return (
-    <div
-      className={`${darkMode ? "dark bg-[#0b2236]" : "light bg-transparent"}`}
-    >
+    <div className="bg-surface-light dark:bg-surface-dark min-h-screen">
       <section
         id="properties"
-        className="lg:w-[90%] m-auto lg:px-20 px-6 py-20 w-full flex flex-col justify-center items-start gap-10"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
-        <div className="flex flex-col justify-center items-start gap-4">
-          <h1
-            data-aos="zoom-in"
-            className="text-[#2d2c55] dark:text-white font-semibold"
-          >
-            PROPIEDADES
-          </h1>
-          <h1
-            data-aos="zoom-in"
-            className="text-black text-4xl font-semibold dark:text-white"
-          >
-            Explora los inmuebles disponibles
-          </h1>
+        <div className="flex flex-col gap-2 mb-10">
+          <p className="section-label">Propiedades</p>
+          <h1 className="section-title">Explora los inmuebles disponibles</h1>
         </div>
 
-        {/* Property grid start */}
-
-        <div
-          id="grid-box"
-          className="px-6 py-4 bg-white dark:bg-[#1a2e40] rounded-xl shadow-md hover:shadow-xl transition"
-        >
-          {properties.length === 0 ? (
-            <div className="text-center text-black col-span-3">
-              No se encontraron propiedades que coincidan con tu búsqueda.
-            </div>
-          ) : (
-            properties.map((item) => (
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-5xl mb-4">🔍</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
+              No se encontraron propiedades con esos filtros.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {properties.map((item) => (
               <Link
-                key={item._id}
-                to={`/properties/${item._id}`}
-                className="block"
+                key={item._id || item.id}
+                to={`/properties/${item._id || item.id}`}
+                className="card overflow-hidden group hover:shadow-md transition-all duration-300 block"
               >
+                {/* Imagen */}
                 <div
-                  id="image-box"
-                  className="bg-cover bg-center h-[250px] rounded-xl p-4 flex flex-col justify-between items-end transition-transform duration-300 hover:scale-105"
-                  style={{
-                    backgroundImage: `url(${item.images?.[0]})`,
-                  }}
+                  className="relative h-56 bg-cover bg-center rounded-t-2xl overflow-hidden"
+                  style={{ backgroundImage: `url(${item.images?.[0]})` }}
                 >
-                  <div
-                    id="top"
-                    className="flex justify-between items-end w-full"
-                  >
-                    <div>
-                      <button className="px-3 py-1 bg-[#517399] hover:bg-white hover:text-black text-white rounded-full text-[13px]">
-                        Ver mas
-                      </button>
-                    </div>
-                    <div className="flex justify-between items-center gap-3">
-                      <button className="px-3 py-1 bg-[#517399] hover:bg-white hover:text-black text-white rounded-full text-[13px]">
-                        {item.type}
-                      </button>
-                    </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute top-3 left-3">
+                    <span className="px-3 py-1 bg-brand-500 text-white text-xs font-semibold rounded-full">
+                      {item.type || "Inmueble"}
+                    </span>
                   </div>
-                  <div
-                    id="bottom"
-                    className=" flex justify-between items-end  w-full"
-                  >
-                    <div className=" flex justify-start items-center gap-2">
-                      <FaMapMarkerAlt className="size-4 text-white" />
-                      <h1 className="text-white">{item.address}</h1>
-                    </div>
-                    <div className="flex justify-center items-center gap-4">
-                      <FaVideo className="size-4 text-white" />
-                      <FaCamera className="size-4 text-white" />
-                    </div>
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+                    <FaMapMarkerAlt className="size-3 text-white/80" />
+                    <span className="text-white text-sm">{item.address}</span>
                   </div>
                 </div>
-                <div className="px-6 py-3 flex flex-col justify-center items-start gap-2 w-full">
-                  <h1 className="text-xl font-bold dark:text-white">
+
+                {/* Info */}
+                <div className="p-5 flex flex-col gap-2">
+                  <h2 className="font-bold text-gray-900 dark:text-white text-base line-clamp-1">
                     {item.title}
-                  </h1>
-                  <h1 className="text-2xl text- text-[#71bFD1] font-bold dark:text-white">
+                  </h2>
+                  <p className="text-brand-500 dark:text-brand-300 font-bold text-xl">
                     ${item.price?.toLocaleString()}
-                  </h1>
-                  <p className="text-gray-500 dark:text-gray-300 text-sm">
-                    {item.location}
                   </p>
-                  <p className="dark:text-white">{item.about}</p>
-                  <div
-                    id="icons"
-                    className="flex justify-center items-start gap-4"
-                  >
-                    <div className="flex justify-center items-start gap-2">
-                      <FaBath className="size-5 text-[#71bFD1]" />
-                      <h1 className="dark:text-white">{item.bath}</h1>
-                    </div>
-                    <div className="flex justify-center items-start gap-2">
-                      <FaBed className="size-5 text-[#71bFD1]" />
-                      <h1 className="dark:text-white">{item.bed}</h1>
-                    </div>
-                    <div className="flex justify-center items-start gap-2">
-                      <MdSpaceDashboard className="size-5 text-[#71bFD1]" />
-                      <h1 className="dark:text-white">{item.area}</h1>
-                    </div>
+                  {item.about && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                      {item.about}
+                    </p>
+                  )}
+
+                  {/* Detalles */}
+                  <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-700 mt-1">
+                    {item.bath != null && (
+                      <span className="flex items-center gap-1.5">
+                        <FaBath className="size-4 text-brand-400" /> {item.bath}
+                      </span>
+                    )}
+                    {item.bed != null && (
+                      <span className="flex items-center gap-1.5">
+                        <FaBed className="size-4 text-brand-400" /> {item.bed}
+                      </span>
+                    )}
+                    {item.area && (
+                      <span className="flex items-center gap-1.5">
+                        <MdSpaceDashboard className="size-4 text-brand-400" /> {item.area}
+                      </span>
+                    )}
                   </div>
-                  <div className="w-full mt-8">
-                    <div
-                      id="owner-info"
-                      className="flex justify-between items-center w-full mt-2"
-                    >
-                      <div className=" flex justify-center items-center gap-2">
-                        <FaUserCircle className="size-5 text-[#71bFD1]" />
-                        <h1 className="dark:text-white">{item.owner}</h1>
-                      </div>
-                      <div className=" flex justify-center items-center gap-4">
-                        <div className=" p-2 border-2 border-gray-200 hover:bg-black cursor-pointer transform hover: scale-110 transition-transform duration-300">
-                          <FaShareAlt className="size-4 text-[#71bFD1]" />
-                        </div>
-                        <div className=" p-2 border-2 border-gray-200 hover:bg-black cursor-pointer transform hover: scale-110 transition-transform duration-300">
-                          <FaHeart className="size-4 text-[#71bFD1]" />
-                        </div>
-                        <div className=" p-2 border-2 border-gray-200 hover:bg-black cursor-pointer transform hover: scale-110 transition-transform duration-300">
-                          <FaPlus className="size-4 text-[#71bFD1]" />
-                        </div>
-                      </div>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                      <FaUserCircle className="size-4 text-brand-400" /> {item.owner}
+                    </span>
+                    <div className="flex gap-1">
+                      {[FaShareAlt, FaHeart, FaPlus].map((Icon, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={(e) => e.preventDefault()}
+                          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700
+                                     text-gray-400 hover:text-brand-500 hover:border-brand-300
+                                     transition-colors duration-200"
+                        >
+                          <Icon className="size-3.5" />
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
               </Link>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
-};
-
-export default Properties;
+}
