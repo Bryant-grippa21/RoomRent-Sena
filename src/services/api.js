@@ -1,5 +1,54 @@
 const API_BASE = 'http://localhost:8080';
 
+/* Ordena multimedias: principal primero, extrae urlMedia */
+function buildImages(multimedias) {
+  if (!Array.isArray(multimedias) || multimedias.length === 0) return [];
+  return [...multimedias]
+    .sort((a, b) => (b.principal ? 1 : 0) - (a.principal ? 1 : 0))
+    .map((m) => m.urlMedia)
+    .filter(Boolean);
+}
+
+/* ── Adaptador de campos backend → frontend ─────────────────────────────────
+   JHipster devuelve nombres en español (titulo, canonArriendo, inmueble.direccion…)
+   El frontend usa nombres en inglés (title, price, address…).
+   Esta función normaliza la respuesta sin modificar el backend.              */
+function transformPublicacion(raw) {
+  if (!raw) return null;
+  const inm = raw.inmueble ?? {};
+  return {
+    id:               raw.id,
+    title:            raw.titulo            ?? '',
+    about:            raw.descripcion       ?? '',
+    description:      raw.descripcion       ?? '',   // alias usado en PropertyDetail
+    price:            raw.canonArriendo,
+    estado:           raw.estado,                    // PUBLICADO | PAUSADO | ARRENDADO | BORRADOR
+    address:          inm.direccion         ?? '',
+    location:         [inm.barrio, inm.localidad, inm.ciudad].filter(Boolean).join(', '),
+    city:             inm.ciudad            ?? '',
+    bed:              inm.numeroHabitaciones,
+    bath:             inm.numeroBanos,
+    area:             inm.areaMetrosCuadrados,
+    type:             inm.tipoInmueble      ?? '',
+    estrato:          inm.estrato,
+    parking:          inm.numeroParqueaderos,
+    images:           buildImages(inm.multimedias),
+    // Campos de detalle
+    deposito:         raw.deposito,
+    requisitos:       raw.requisitos        ?? '',
+    fechaDisponible:  raw.fechaDisponible,
+    seguroRequerido:  raw.seguroRequerido,
+    datacreditoReq:   raw.datacreditoRequerido,
+    permiteRoomies:   raw.permiteRoomies,
+    aceptaMascotas:   raw.aceptaMascotas,
+    permiteFumadores: raw.permiteFumadores,
+    permiteNinos:     raw.permiteNinos,
+    permiteVisitas:   raw.permiteVisitas,
+    permiteParejas:   raw.permiteParejas,
+    _raw:             raw,
+  };
+}
+
 /* ── Fetch base — Bearer token + manejo de 401 ── */
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem('token');
@@ -70,8 +119,11 @@ export const authApi = {
 
 /* ── Publicaciones de inmuebles (público GET, autenticado POST/PUT/DELETE) ── */
 export const inmuebleApi = {
-  getAll:  (params = '') => apiFetchPaged(`/api/publicacion-inmuebles?${params}`),
-  getOne:  (id)          => apiFetch(`/api/publicacion-inmuebles/${id}`),
+  getAll:  async (params = '') => {
+    const { data, total } = await apiFetchPaged(`/api/publicacion-inmuebles?${params}`);
+    return { data: data.map(transformPublicacion), total };
+  },
+  getOne:  async (id) => transformPublicacion(await apiFetch(`/api/publicacion-inmuebles/${id}`)),
   create:  (data)        => apiFetch('/api/publicacion-inmuebles',     { method: 'POST',  body: JSON.stringify(data) }),
   update:  (id, data)    => apiFetch(`/api/publicacion-inmuebles/${id}`, { method: 'PUT',   body: JSON.stringify(data) }),
   remove:  (id)          => apiFetch(`/api/publicacion-inmuebles/${id}`, { method: 'DELETE' }),
