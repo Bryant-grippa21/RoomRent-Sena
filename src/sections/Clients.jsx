@@ -1,16 +1,17 @@
 import { clients } from "../data/clients";
 import { FaStar } from "react-icons/fa";
+import { FaQuoteLeft } from "react-icons/fa6";
 
 export default function Clients() {
   return (
-    <div className="bg-surface-light dark:bg-surface-dark">
-      <section
-        id="testimonials"
-        className="w-[95%] mx-auto px-6 md:px-12 py-20 flex flex-col gap-12"
-      >
-        <div className="flex flex-col gap-3">
-          <p data-aos="zoom-in" className="section-label">Nuestros clientes</p>
-          <h2 data-aos="zoom-in" data-aos-delay="150" className="section-title">
+    <section
+      id="testimonials"
+      className="bg-slate-50 dark:bg-slate-900 w-full px-4 sm:px-6 lg:px-8 py-20"
+    >
+      <div className="max-w-7xl mx-auto flex flex-col gap-12">
+        <div className="flex flex-col gap-3 max-w-xl">
+          <p data-aos="fade-up" className="section-label">Nuestros clientes</p>
+          <h2 data-aos="fade-up" data-aos-delay="100" className="section-title">
             Lo que dicen quienes nos eligieron
           </h2>
         </div>
@@ -19,41 +20,41 @@ export default function Clients() {
           {clients.map((item, index) => (
             <div
               key={index}
-              data-aos="zoom-in"
-              data-aos-delay="200"
-              className="group card p-8 flex flex-col gap-5
-                         hover:bg-brand-300 dark:hover:bg-brand-700
-                         transition-all duration-300 cursor-pointer"
+              data-aos="fade-up"
+              data-aos-delay={index * 80}
+              className="card card-hover p-7 flex flex-col gap-5"
             >
-              <div className="flex items-center gap-4">
+              <FaQuoteLeft className="size-5 text-brand-300 dark:text-brand-600" />
+
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed flex-1">
+                {item.feedback}
+              </p>
+
+              <div className="flex gap-0.5 mt-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <FaStar key={i} className="size-3.5 text-amber-400" />
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-14 h-14 rounded-full object-cover ring-2 ring-brand-300"
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-brand-100 dark:ring-brand-800"
                 />
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white group-hover:text-white">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
                     {item.name}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {item.text}
                   </p>
                 </div>
               </div>
-
-              <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90 leading-relaxed text-justify">
-                {item.feedback}
-              </p>
-
-              <div className="flex gap-1 mt-auto">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <FaStar key={i} className="size-4 text-yellow-400" />
-                ))}
-              </div>
             </div>
           ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }

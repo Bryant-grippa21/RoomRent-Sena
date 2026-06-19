@@ -18,20 +18,20 @@ export default function ArrendatarioDashboard() {
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark">
 
-      <header className="bg-white dark:bg-card-dark border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+      <header className="bg-white dark:bg-card-dark border-b border-slate-200 dark:border-slate-700/60 sticky top-0 z-30 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🏡</span>
-            <h1 className="text-lg font-bold text-brand-600 dark:text-brand-300">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">🏡</span>
+            <h1 className="text-sm font-bold text-slate-800 dark:text-slate-100">
               Panel Arrendatario
             </h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">
               {user?.firstName || user?.login}
             </span>
             <button onClick={handleLogout} className="btn-danger">
-              Cerrar sesión
+              Salir
             </button>
           </div>
         </div>
@@ -39,8 +39,9 @@ export default function ArrendatarioDashboard() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-8">
+          <p className="section-label mb-1">Tu espacio</p>
           <h2 className="section-title">Bienvenido de nuevo</h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+          <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
             Encuentra tu próximo hogar o gestiona tus arriendos activos.
           </p>
         </div>

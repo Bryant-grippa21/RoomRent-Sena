@@ -21,12 +21,12 @@ export default function PropertyDetail() {
   if (loading) {
     return (
       <div className="bg-surface-light dark:bg-surface-dark min-h-screen">
-        <div className="max-w-4xl mx-auto px-4 py-12 animate-pulse">
-          <div className="h-80 bg-gray-200 dark:bg-gray-700 rounded-2xl mb-8" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 animate-pulse">
+          <div className="h-80 bg-slate-200 dark:bg-slate-700 rounded-xl mb-8" />
           <div className="space-y-4">
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+            <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-2/3" />
+            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
+            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full" />
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@ export default function PropertyDetail() {
       <div className="bg-surface-light dark:bg-surface-dark min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-5xl mb-4">🏚️</p>
-          <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
+          <p className="text-slate-600 dark:text-slate-400 text-lg mb-6">
             Propiedad no encontrada.
           </p>
           <button onClick={() => navigate("/properties")} className="btn-primary">
@@ -53,16 +53,16 @@ export default function PropertyDetail() {
     <div className="bg-surface-light dark:bg-surface-dark min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
 
-        {/* Back */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-300 mb-6 transition-colors"
+          className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400
+                     hover:text-brand-600 dark:hover:text-brand-400 mb-6 transition-colors"
         >
-          <FaArrowLeft className="size-4" /> Volver
+          <FaArrowLeft className="size-3.5" /> Volver
         </button>
 
         {/* Imagen principal */}
-        <div className="rounded-2xl overflow-hidden h-72 md:h-96 bg-gray-200 dark:bg-gray-800 mb-8">
+        <div className="rounded-xl overflow-hidden h-72 md:h-96 bg-slate-200 dark:bg-slate-800 mb-8">
           {property.images?.[0] && (
             <img
               src={property.images[0]}
@@ -73,46 +73,46 @@ export default function PropertyDetail() {
         </div>
 
         {/* Info */}
-        <div className="card p-8 flex flex-col gap-5">
+        <div className="card p-7 flex flex-col gap-5">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
               {property.title}
             </h1>
             {property.location && (
-              <p className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mt-2">
-                <FaMapMarkerAlt className="size-4 text-brand-400" />
+              <p className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-sm mt-2">
+                <FaMapMarkerAlt className="size-4 text-brand-500" />
                 {property.location}
               </p>
             )}
           </div>
 
-          <p className="text-3xl font-bold text-brand-500 dark:text-brand-300">
+          <p className="text-3xl font-bold text-brand-600 dark:text-brand-400">
             ${property.price?.toLocaleString()}
           </p>
 
           {(property.bath != null || property.bed != null || property.area) && (
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600 dark:text-gray-400
-                            py-4 border-y border-gray-100 dark:border-gray-700">
+            <div className="flex flex-wrap gap-6 text-sm text-slate-600 dark:text-slate-400
+                            py-4 border-y border-slate-100 dark:border-slate-700">
               {property.bath != null && (
                 <span className="flex items-center gap-2">
-                  <FaBath className="size-5 text-brand-400" /> {property.bath} baños
+                  <FaBath className="size-4 text-brand-500 dark:text-brand-400" /> {property.bath} baños
                 </span>
               )}
               {property.bed != null && (
                 <span className="flex items-center gap-2">
-                  <FaBed className="size-5 text-brand-400" /> {property.bed} habitaciones
+                  <FaBed className="size-4 text-brand-500 dark:text-brand-400" /> {property.bed} habitaciones
                 </span>
               )}
               {property.area && (
                 <span className="flex items-center gap-2">
-                  <MdSpaceDashboard className="size-5 text-brand-400" /> {property.area} m²
+                  <MdSpaceDashboard className="size-4 text-brand-500 dark:text-brand-400" /> {property.area} m²
                 </span>
               )}
             </div>
           )}
 
           {property.description && (
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               {property.description}
             </p>
           )}

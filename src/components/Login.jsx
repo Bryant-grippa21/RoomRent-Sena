@@ -66,25 +66,25 @@ export default function Login() {
           </h1>
 
           {/* Toggle login/register */}
-          <div className="relative flex h-11 mb-6 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 p-1">
+          <div className="relative flex h-10 mb-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 p-1">
             <button
               type="button"
               onClick={() => setIsLoginMode(true)}
-              className={`w-1/2 text-sm font-semibold rounded-lg z-10 transition-colors duration-200
-                ${isLoginMode ? "text-white" : "text-gray-500 dark:text-gray-400"}`}
+              className={`w-1/2 text-sm font-semibold rounded-md z-10 transition-colors duration-200
+                ${isLoginMode ? "text-white" : "text-slate-500 dark:text-slate-400"}`}
             >
               Iniciar sesión
             </button>
             <button
               type="button"
               onClick={() => setIsLoginMode(false)}
-              className={`w-1/2 text-sm font-semibold rounded-lg z-10 transition-colors duration-200
-                ${!isLoginMode ? "text-white" : "text-gray-500 dark:text-gray-400"}`}
+              className={`w-1/2 text-sm font-semibold rounded-md z-10 transition-colors duration-200
+                ${!isLoginMode ? "text-white" : "text-slate-500 dark:text-slate-400"}`}
             >
               Registrarse
             </button>
             <div
-              className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-brand-500
+              className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-md bg-brand-600
                           transition-all duration-300 ${isLoginMode ? "left-1" : "left-[calc(50%+3px)]"}`}
             />
           </div>
@@ -151,7 +151,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setOpenModal(true)}
-                className="text-sm text-brand-500 hover:text-brand-700 dark:text-brand-300 dark:hover:text-brand-200 text-left hover:underline"
+                className="text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 text-left hover:underline"
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -171,7 +171,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => { setIsLoginMode(!isLoginMode); setError(""); setSuccess(""); }}
-                className="text-brand-500 dark:text-brand-300 font-semibold hover:underline"
+                className="text-brand-600 dark:text-brand-400 font-semibold hover:underline"
               >
                 {isLoginMode ? "Regístrate" : "Inicia sesión"}
               </button>

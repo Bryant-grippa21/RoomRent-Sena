@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 
 import Home from "./sections/Home";
@@ -9,42 +9,77 @@ import Clients from "./sections/Clients";
 import Contact from "./sections/Contact";
 
 import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 import PropertiesPage from "./pages/PropertiesPage";
 import PropertyDetail from "./pages/PropertyDetail";
+import ArrendadorDashboard from "./pages/ArrendadorDashboard";
+import ArrendatarioDashboard from "./pages/ArrendatarioDashboard";
 
 const App = () => {
   return (
     <Routes>
 
+      {/* LANDING y navegacion publica */}
       <Route element={<MainLayout />}>
+        <Route
+          index
+          element={
+            <>
+              <Home />
+              <About />
+              <PopularAreas />
+              <Clients />
+              <Services />
+              <Contact />
+            </>
+          }
+        />
+        <Route path="properties" element={<PropertiesPage />} />
+        <Route path="properties/:id" element={<PropertyDetail />} />
+      </Route>
 
-      {/* LANDING */}
+      {/* AUTH */}
+      <Route path="/login" element={<Login />} />
+
+      {/* DASHBOARD ARRENDADOR */}
       <Route
-        index
+        path="/arrendador"
         element={
-          <>
-            <Home />
-            <About />
-            <PopularAreas />
-            <Clients />
-            <Services />
-            <Contact />
-          </>
+          <ProtectedRoute requiredRole="ROLE_ARRENDADOR">
+            <ArrendadorDashboard />
+          </ProtectedRoute>
         }
       />
 
-      {/* PROPERTIES LIST */}
-      <Route path="properties" element={ <PropertiesPage />} />
+      {/* DASHBOARD ARRENDATARIO */}
+      <Route
+        path="/arrendatario"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ARRENDATARIO">
+            <ArrendatarioDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-      {/* PROPERTY DETAIL */}
-      <Route path="properties/:id" element={ <PropertyDetail /> }/>
-      </Route>
+      {/* ADMIN redirige al panel de JHipster */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ADMIN">
+            {/* El panel admin completo vive en JHipster :8080 */}
+            <AdminRedirect />
+          </ProtectedRoute>
+        }
+      />
 
-      {/* LOGIN */}
-      <Route path="/login" element={<Login />} />
-
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
+
+function AdminRedirect() {
+  window.location.href = "http://localhost:8080";
+  return null;
+}
 
 export default App;

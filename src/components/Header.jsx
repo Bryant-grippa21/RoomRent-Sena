@@ -16,14 +16,16 @@ const navItems = [
 ];
 
 const linkCls =
-  "text-sm font-medium uppercase tracking-wide px-3 py-2 rounded-lg " +
-  "text-gray-800 dark:text-gray-200 " +
-  "hover:bg-brand-500 hover:text-white dark:hover:bg-brand-500 " +
-  "transition-colors duration-200 cursor-pointer";
+  "text-sm font-medium px-3 py-2 rounded-md " +
+  "text-slate-600 dark:text-slate-300 " +
+  "hover:text-brand-600 dark:hover:text-brand-400 " +
+  "hover:bg-brand-50 dark:hover:bg-slate-800 " +
+  "transition-colors duration-150 cursor-pointer";
 
 const mobileLinkCls =
-  "block text-sm font-medium uppercase tracking-wide px-4 py-3 rounded-lg " +
-  "text-gray-200 hover:bg-brand-500 transition-colors duration-200 cursor-pointer";
+  "block text-sm font-medium px-3 py-2.5 rounded-md " +
+  "text-slate-200 hover:text-white hover:bg-slate-700 " +
+  "transition-colors duration-150 cursor-pointer";
 
 export default function Header() {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -54,91 +56,91 @@ export default function Header() {
       );
     }
     return (
-      <ScrollLink key={label} to={path} smooth offset={-80} className={cls} onClick={close}>
+      <ScrollLink key={label} to={path} smooth offset={-72} className={cls} onClick={close}>
         {label}
       </ScrollLink>
     );
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-nav-light dark:bg-nav-dark border-b border-brand-100 dark:border-gray-700/50 shadow-sm">
+    <nav className="sticky top-0 z-40 bg-nav-light dark:bg-nav-dark border-b border-slate-200/80 dark:border-slate-700/60 shadow-sm backdrop-blur-sm bg-white/95 dark:bg-slate-900/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <RouterLink to="/" className="flex-shrink-0">
-            <img src={logo} alt="RoomRent" className="h-10 w-auto rounded-xl dark:invert" />
+          <RouterLink to="/" className="flex-shrink-0 flex items-center gap-2">
+            <img src={logo} alt="RoomRent" className="h-8 w-auto dark:invert" />
           </RouterLink>
 
           {/* Nav desktop */}
-          <ul className="hidden lg:flex items-center gap-1">
+          <ul className="hidden lg:flex items-center gap-0.5">
             {navItems.map((item) => renderItem(item))}
           </ul>
 
           {/* Acciones desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2">
             <button
               onClick={toggleDarkMode}
               aria-label="Cambiar modo"
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-md text-slate-500 dark:text-slate-400
+                         hover:text-slate-700 dark:hover:text-slate-200
+                         hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
-              {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
+              {darkMode ? <FaSun size={17} /> : <FaMoon size={17} />}
             </button>
 
             {user ? (
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-600 dark:text-gray-400 max-w-[120px] truncate">
+              <div className="flex items-center gap-2 ml-1">
+                <span className="text-xs text-slate-500 dark:text-slate-400 max-w-[110px] truncate">
                   {user.firstName || user.login}
                 </span>
                 <button onClick={handleLogout} className="btn-danger">
-                  Cerrar sesión
+                  Salir
                 </button>
               </div>
             ) : (
-              <RouterLink to="/login" className="btn-primary text-sm px-5 py-2">
+              <RouterLink to="/login" className="btn-primary ml-1">
                 Iniciar sesión
               </RouterLink>
             )}
           </div>
 
-          {/* Mobile: toggle + hamburger */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile: dark toggle + hamburger */}
+          <div className="flex lg:hidden items-center gap-1">
             <button
               onClick={toggleDarkMode}
               aria-label="Cambiar modo"
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
-              {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
+              {darkMode ? <FaSun size={17} /> : <FaMoon size={17} />}
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Menú"
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
-              {menuOpen ? <FaXmark size={20} /> : <FaBars size={20} />}
+              {menuOpen ? <FaXmark size={19} /> : <FaBars size={19} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — dark siempre para mantener coherencia */}
       {menuOpen && (
-        <div className="lg:hidden bg-gray-900 border-t border-gray-700 shadow-lg">
-          <div className="px-4 py-3 flex flex-col gap-1">
+        <div className="lg:hidden bg-slate-900 border-t border-slate-700">
+          <div className="px-3 py-3 flex flex-col gap-0.5">
             {navItems.map((item) => renderItem(item, true))}
-            <div className="mt-3 pt-3 border-t border-gray-700">
+            <div className="mt-2 pt-2 border-t border-slate-700">
               {user ? (
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-gray-400 truncate">{user.firstName || user.login}</span>
-                  <button onClick={handleLogout} className="btn-danger">
-                    Cerrar sesión
-                  </button>
+                <div className="flex items-center justify-between gap-3 px-1">
+                  <span className="text-xs text-slate-400 truncate">{user.firstName || user.login}</span>
+                  <button onClick={handleLogout} className="btn-danger">Salir</button>
                 </div>
               ) : (
                 <RouterLink
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="btn-primary w-full justify-center text-sm"
+                  className="btn-primary w-full justify-center"
                 >
                   Iniciar sesión
                 </RouterLink>
