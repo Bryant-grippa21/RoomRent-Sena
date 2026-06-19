@@ -27,8 +27,8 @@ export default function Properties() {
       setLoading(true);
       try {
         const params = new URLSearchParams(locationHook.search);
-        const data = await inmuebleApi.getAll(params.toString());
-        setProperties(Array.isArray(data) ? data : []);
+        const { data } = await inmuebleApi.getAll(params.toString());
+        setProperties(data);
       } catch {
         setProperties([]);
       } finally {

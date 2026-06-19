@@ -17,6 +17,11 @@ export function AuthProvider({ children }) {
     } else {
       setLoading(false);
     }
+
+    // Escucha 401 global disparado por apiFetch cuando el token expira
+    const handleAuthLogout = () => setUser(null);
+    window.addEventListener('auth:logout', handleAuthLogout);
+    return () => window.removeEventListener('auth:logout', handleAuthLogout);
   }, []);
 
   const login = async (username, password) => {

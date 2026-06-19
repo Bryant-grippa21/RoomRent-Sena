@@ -1,18 +1,53 @@
 const API_BASE = 'http://localhost:8080';
 
+/* ── Fetch base — Bearer token + manejo de 401 ── */
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem('token');
   const headers = { 'Content-Type': 'application/json', ...options.headers };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  // Token expirado o inválido — limpia sesión y recarga
+  if (res.status === 401) {
+    localStorage.removeItem('token');
+    window.dispatchEvent(new Event('auth:logout'));
+    throw new Error('Sesión expirada. Por favor inicia sesión nuevamente.');
+  }
+
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail || err.message || res.statusText);
+    throw new Error(err.detail || err.message || `Error ${res.status}`);
   }
+
   return res.status === 204 ? null : res.json();
 }
 
+/* ── Paginación — JHipster devuelve array con header X-Total-Count ──
+   Retorna { data: [], total: number }                                 */
+export async function apiFetchPaged(path, options = {}) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  if (res.status === 401) {
+    localStorage.removeItem('token');
+    window.dispatchEvent(new Event('auth:logout'));
+    throw new Error('Sesión expirada.');
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || `Error ${res.status}`);
+  }
+
+  const data  = await res.json();
+  const total = parseInt(res.headers.get('X-Total-Count') ?? '0', 10);
+  return { data: Array.isArray(data) ? data : [], total };
+}
+
+/* ── Auth ── */
 export const authApi = {
   login: (username, password) =>
     apiFetch('/api/authenticate', {
@@ -33,7 +68,62 @@ export const authApi = {
     }),
 };
 
+/* ── Publicaciones de inmuebles (público GET, autenticado POST/PUT/DELETE) ── */
 export const inmuebleApi = {
-  getAll: (params = '') => apiFetch(`/api/publicacion-inmuebles?${params}`),
-  getOne: (id) => apiFetch(`/api/publicacion-inmuebles/${id}`),
+  getAll:  (params = '') => apiFetchPaged(`/api/publicacion-inmuebles?${params}`),
+  getOne:  (id)          => apiFetch(`/api/publicacion-inmuebles/${id}`),
+  create:  (data)        => apiFetch('/api/publicacion-inmuebles',     { method: 'POST',  body: JSON.stringify(data) }),
+  update:  (id, data)    => apiFetch(`/api/publicacion-inmuebles/${id}`, { method: 'PUT',   body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/publicacion-inmuebles/${id}`, { method: 'DELETE' }),
+};
+
+/* ── Publicaciones de roomies ── */
+export const roomieApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/publicacion-roomies?${params}`),
+  getOne:  (id)          => apiFetch(`/api/publicacion-roomies/${id}`),
+  create:  (data)        => apiFetch('/api/publicacion-roomies',      { method: 'POST',  body: JSON.stringify(data) }),
+  update:  (id, data)    => apiFetch(`/api/publicacion-roomies/${id}`, { method: 'PUT',   body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/publicacion-roomies/${id}`, { method: 'DELETE' }),
+};
+
+/* ── Solicitudes de arriendo ── */
+export const solicitudArriendoApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/solicitud-arriendos?${params}`),
+  getOne:  (id)          => apiFetch(`/api/solicitud-arriendos/${id}`),
+  create:  (data)        => apiFetch('/api/solicitud-arriendos',       { method: 'POST',  body: JSON.stringify(data) }),
+  update:  (id, data)    => apiFetch(`/api/solicitud-arriendos/${id}`, { method: 'PUT',   body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/solicitud-arriendos/${id}`, { method: 'DELETE' }),
+};
+
+/* ── Visitas programadas ── */
+export const visitaApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/visita-programadas?${params}`),
+  getOne:  (id)          => apiFetch(`/api/visita-programadas/${id}`),
+  create:  (data)        => apiFetch('/api/visita-programadas',        { method: 'POST',  body: JSON.stringify(data) }),
+  update:  (id, data)    => apiFetch(`/api/visita-programadas/${id}`,  { method: 'PUT',   body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/visita-programadas/${id}`,  { method: 'DELETE' }),
+};
+
+/* ── Contratos de arriendo ── */
+export const contratoApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/contrato-arriendos?${params}`),
+  getOne:  (id)          => apiFetch(`/api/contrato-arriendos/${id}`),
+  create:  (data)        => apiFetch('/api/contrato-arriendos',        { method: 'POST',  body: JSON.stringify(data) }),
+  update:  (id, data)    => apiFetch(`/api/contrato-arriendos/${id}`,  { method: 'PUT',   body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/contrato-arriendos/${id}`,  { method: 'DELETE' }),
+};
+
+/* ── Perfil de usuario ── */
+export const perfilApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/perfil-usuarios?${params}`),
+  getOne:  (id)          => apiFetch(`/api/perfil-usuarios/${id}`),
+  update:  (id, data)    => apiFetch(`/api/perfil-usuarios/${id}`,     { method: 'PUT',   body: JSON.stringify(data) }),
+};
+
+/* ── Calificaciones ── */
+export const calificacionApi = {
+  getAll:  (params = '') => apiFetchPaged(`/api/calificacions?${params}`),
+  getOne:  (id)          => apiFetch(`/api/calificacions/${id}`),
+  create:  (data)        => apiFetch('/api/calificacions',             { method: 'POST',  body: JSON.stringify(data) }),
+  remove:  (id)          => apiFetch(`/api/calificacions/${id}`,       { method: 'DELETE' }),
 };
