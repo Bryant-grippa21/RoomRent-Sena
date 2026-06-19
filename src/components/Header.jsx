@@ -1,152 +1,152 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
-import { Link as RouterLink, useLocation } from "react-router-dom";
-import { FaXmark, FaBars } from "react-icons/fa6";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { FaXmark, FaBars, FaMoon, FaSun } from "react-icons/fa6";
 import logo from "../assets/images/roomrent.png";
 import useDarkMode from "./useDarkMode";
+import { useAuth } from "../context/AuthContext";
 
-const Header = () => {
-  const { darkMode } = useDarkMode();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const navItems = [
+  { label: "Inicio",       path: "home",        type: "scroll" },
+  { label: "Nosotros",     path: "about",        type: "scroll" },
+  { label: "Propiedades",  path: "/properties",  type: "route"  },
+  { label: "Servicios",    path: "services",     type: "scroll" },
+  { label: "Testimonios",  path: "testimonials", type: "scroll" },
+  { label: "Contacto",     path: "contact",      type: "scroll" },
+];
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+const linkCls =
+  "text-sm font-medium uppercase tracking-wide px-3 py-2 rounded-lg " +
+  "text-gray-800 dark:text-gray-200 " +
+  "hover:bg-brand-500 hover:text-white dark:hover:bg-brand-500 " +
+  "transition-colors duration-200 cursor-pointer";
 
+const mobileLinkCls =
+  "block text-sm font-medium uppercase tracking-wide px-4 py-3 rounded-lg " +
+  "text-gray-200 hover:bg-brand-500 transition-colors duration-200 cursor-pointer";
+
+export default function Header() {
+  const { darkMode, toggleDarkMode } = useDarkMode();
+  const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  const navItems = [
-    { link: "Inicio", path: "home", type: "scroll" },
-    { link: "Nosotros", path: "about", type: "scroll" },
-    { link: "Propiedades", path: "/properties", type: "route" },
-    { link: "Servicios", path: "services", type: "scroll" },
-    { link: "Testimonios", path: "testimonials", type: "scroll" },
-    { link: "Contacto", path: "contact", type: "scroll" },
-  ];
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setMenuOpen(false);
+  };
+
+  const renderItem = ({ label, path, type }, mobile = false) => {
+    const cls = mobile ? mobileLinkCls : linkCls;
+    const close = () => setMenuOpen(false);
+
+    if (type === "route") {
+      return <RouterLink key={label} to={path} className={cls} onClick={close}>{label}</RouterLink>;
+    }
+    if (!isHome) {
+      return (
+        <RouterLink key={label} to="/" state={{ scrollTo: path }} className={cls} onClick={close}>
+          {label}
+        </RouterLink>
+      );
+    }
+    return (
+      <ScrollLink key={label} to={path} smooth offset={-80} className={cls} onClick={close}>
+        {label}
+      </ScrollLink>
+    );
+  };
 
   return (
-    <nav
-      className={`${
-        darkMode ? "dark bg-[#65727c]" : "light bg-[#cadffb]"
-      } flex justify-between items-center gap-4 lg:px-20 px-4 py-3 sticky top-0 z-30`}
-    >
-      {/* LOGO */}
-      <div id="logo">
-        <img
-          src={logo}
-          alt="Room Rent Logo"
-          className="lg:w-[50px] w-[50px] rounded-xl dark:invert"
-        />
+    <nav className="sticky top-0 z-40 bg-nav-light dark:bg-nav-dark border-b border-brand-100 dark:border-gray-700/50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+
+          {/* Logo */}
+          <RouterLink to="/" className="flex-shrink-0">
+            <img src={logo} alt="RoomRent" className="h-10 w-auto rounded-xl dark:invert" />
+          </RouterLink>
+
+          {/* Nav desktop */}
+          <ul className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => renderItem(item))}
+          </ul>
+
+          {/* Acciones desktop */}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              onClick={toggleDarkMode}
+              aria-label="Cambiar modo"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
+            </button>
+
+            {user ? (
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-600 dark:text-gray-400 max-w-[120px] truncate">
+                  {user.firstName || user.login}
+                </span>
+                <button onClick={handleLogout} className="btn-danger">
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : (
+              <RouterLink to="/login" className="btn-primary text-sm px-5 py-2">
+                Iniciar sesión
+              </RouterLink>
+            )}
+          </div>
+
+          {/* Mobile: toggle + hamburger */}
+          <div className="flex lg:hidden items-center gap-2">
+            <button
+              onClick={toggleDarkMode}
+              aria-label="Cambiar modo"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
+            </button>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menú"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-brand-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              {menuOpen ? <FaXmark size={20} /> : <FaBars size={20} />}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* DESKTOP MENU */}
-      <ul className="lg:flex justify-center items-center gap-8 hidden">
-        {navItems.map(({ link, path, type }) => {
-          if (!isHome && type === "scroll") {
-            return (
-              <RouterLink
-                key={link}
-                to="/"
-                state={{ scrollTo: path }}
-                className="text-black text-[15px] uppercase px-3 py-2 dark:text-white rounded-lg hover:bg-[#517399] hover:text-white"
-              >
-                {link}
-              </RouterLink>
-            );
-          }
-
-          if (type === "route") {
-            return (
-              <RouterLink
-                key={link}
-                to={path}
-                className="text-black text-[15px] uppercase px-3 py-2 dark:text-white rounded-lg hover:bg-[#517399] hover:text-white"
-              >
-                {link}
-              </RouterLink>
-            );
-          }
-
-          return (
-            <ScrollLink
-              key={link}
-              to={path}
-              smooth
-              offset={-100}
-              className="text-black text-[15px] uppercase px-3 py-2 dark:text-white rounded-lg hover:bg-[#517399] hover:text-white cursor-pointer"
-            >
-              {link}
-            </ScrollLink>
-          );
-        })}
-      </ul>
-
-      {/* MOBILE MENU BUTTON */}
-      <button
-        onClick={toggleMenu}
-        className="lg:hidden text-2xl text-black dark:text-white"
-      >
-        {isMenuOpen ? <FaXmark /> : <FaBars />}
-      </button>
-
-      {/* MOBILE MENU */}
-      {isMenuOpen && (
-        <div className="w-full bg-slate-800 p-4 absolute top-20 left-0">
-          <ul className="flex flex-col gap-2">
-            {navItems.map(({ link, path, type }) => {
-              if (!isHome && type === "scroll") {
-                return (
-                  <RouterLink
-                    key={link}
-                    to="/"
-                    state={{ scrollTo: path }}
-                    onClick={closeMenu}
-                    className="text-white uppercase p-3 rounded-lg hover:bg-[#517399]"
-                  >
-                    {link}
-                  </RouterLink>
-                );
-              }
-
-              if (type === "route") {
-                return (
-                  <RouterLink
-                    key={link}
-                    to={path}
-                    onClick={closeMenu}
-                    className="text-white uppercase p-3 rounded-lg hover:bg-[#517399]"
-                  >
-                    {link}
-                  </RouterLink>
-                );
-              }
-
-              return (
-                <ScrollLink
-                  key={link}
-                  to={path}
-                  smooth
-                  offset={-100}
-                  onClick={closeMenu}
-                  className="text-white uppercase p-3 rounded-lg hover:bg-[#517399] cursor-pointer"
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="lg:hidden bg-gray-900 border-t border-gray-700 shadow-lg">
+          <div className="px-4 py-3 flex flex-col gap-1">
+            {navItems.map((item) => renderItem(item, true))}
+            <div className="mt-3 pt-3 border-t border-gray-700">
+              {user ? (
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-sm text-gray-400 truncate">{user.firstName || user.login}</span>
+                  <button onClick={handleLogout} className="btn-danger">
+                    Cerrar sesión
+                  </button>
+                </div>
+              ) : (
+                <RouterLink
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="btn-primary w-full justify-center text-sm"
                 >
-                  {link}
-                </ScrollLink>
-              );
-            })}
-          </ul>
+                  Iniciar sesión
+                </RouterLink>
+              )}
+            </div>
+          </div>
         </div>
       )}
-
-      {/* LOGIN */}
-      <RouterLink
-        to="/login"
-        className="px-8 py-2 bg-[#517399] text-white rounded-lg hover:bg-[#35516d]"
-      >
-        Iniciar Sesión
-      </RouterLink>
     </nav>
   );
-};
-
-export default Header;
+}
