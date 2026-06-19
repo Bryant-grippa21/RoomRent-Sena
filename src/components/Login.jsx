@@ -1,77 +1,186 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { authApi } from "../services/api";
 import ResetPasswordModal from "./ResetPasswordModal";
 import bgVideo from "../assets/videos/bogota.mp4";
 
-
-
 export default function Login() {
-    const [isLoginMode, setIsLoginMode] = useState(true);
-    const [openModal, setOpenModal] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    return (
-        <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-            {/* Background Video */}
-            <video
-                className="absolute inset-0 w-full h-full object-cover"
-                src={bgVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    const form = e.target;
+
+    try {
+      if (isLoginMode) {
+        const account = await login(form.username.value, form.password.value);
+        const roles = account.authorities ?? [];
+        if (roles.includes("ROLE_ADMIN"))        navigate("/admin");
+        else if (roles.includes("ROLE_ARRENDADOR")) navigate("/arrendador");
+        else                                      navigate("/arrendatario");
+      } else {
+        await authApi.register({
+          login:    form.username.value,
+          email:    form.email.value,
+          password: form.password.value,
+          langKey:  "es",
+        });
+        setSuccess("Cuenta creada. Revisa tu correo para activarla.");
+        setIsLoginMode(true);
+      }
+    } catch (err) {
+      setError(err.message || "Ocurrió un error. Intenta nuevamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Video de fondo */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src={bgVideo}
+        autoPlay loop muted playsInline
+      />
+      <div className="absolute inset-0 bg-black/60" />
+
+      {/* Card del formulario */}
+      <div className="relative z-10 w-full max-w-md mx-4">
+        <div className="bg-white/90 dark:bg-gray-900/95 backdrop-blur-md rounded-2xl shadow-2xl p-8">
+
+          {/* Título */}
+          <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
+            {isLoginMode ? "Iniciar sesión" : "Crear cuenta"}
+          </h1>
+
+          {/* Toggle login/register */}
+          <div className="relative flex h-11 mb-6 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 p-1">
+            <button
+              type="button"
+              onClick={() => setIsLoginMode(true)}
+              className={`w-1/2 text-sm font-semibold rounded-lg z-10 transition-colors duration-200
+                ${isLoginMode ? "text-white" : "text-gray-500 dark:text-gray-400"}`}
+            >
+              Iniciar sesión
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsLoginMode(false)}
+              className={`w-1/2 text-sm font-semibold rounded-lg z-10 transition-colors duration-200
+                ${!isLoginMode ? "text-white" : "text-gray-500 dark:text-gray-400"}`}
+            >
+              Registrarse
+            </button>
+            <div
+              className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-brand-500
+                          transition-all duration-300 ${isLoginMode ? "left-1" : "left-[calc(50%+3px)]"}`}
             />
-            <div className="absolute inset-0 bg-black/50"></div>
-            <div className="relative z-10 bg-white/60 dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+          </div>
 
-                {/* Header title */}
-                <div className="flex justify-center mb-4">
-                    <h2 className="text-3xl font-semibold text-center">{isLoginMode ? "Iniciar Sesión" : "Registrarse"}</h2>
-                </div>
-
-                {/* Controls */}
-                <div className="relative flex h-12 mb-6 border border-gray-300 rounded-full overflow-hidden">
-                    <button onClick={() => setIsLoginMode(true)} className={`w-1/2 text-lg font-medium transition-all z-10 ${isLoginMode ? "text-white" : "text-black"}`}>Iniciar Sesión</button>
-                    <button onClick={() => setIsLoginMode(false)} className={`w-1/2 text-lg font-medium transition-all z-10 ${!isLoginMode ? "text-white" : "text-black"}`}>Registrarse</button>
-                    <div className={`absolute top-0 h-full w-1/2 rounded-full bg-linear-to-r from-blue-700 via-cyan-600 to-cyan-200 ${isLoginMode ? "left-0" : "left-1/2"}`}></div>
-                </div>
-
-                {/* Form */}
-                <form className="space-y-4">
-                    {!isLoginMode && (
-                        <input type="text" placeholder="Nombre" importd className="w-full p-3 border-gray-300 outline-none focus:border-cyan-500 placeholder-gray-800" />
-                    )}
-
-                    <input type="email" placeholder="Correo" importd className="w-full p-3 border-gray-300 outline-none focus:border-cyan-500 placeholder-gray-800" />
-                    <input type="password" placeholder="Contraseña" importd className="w-full p-3 border-gray-300 outline-none focus:border-cyan-500 placeholder-gray-800" />
-                    {!isLoginMode && (
-                        <input type="password" placeholder="Confirmar Contraseña" importd className="w-full p-3 border-gray-300 outline-none focus:border-cyan-500 placeholder-gray-800" />
-                    )}
-
-                    {/* Forgot password link */}
-                    {isLoginMode && (
-                        <button
-                            onClick={() => setOpenModal(true)}
-                            className="text-blue-500 hover:underline"
-                        >
-                            Olvidé mi contraseña
-                        </button>
-                    )}
-
-                    {/* Shared button */}
-                    <button className="w-full bg-linear-to-r from-blue-700 via-cyan-600 to-cyan-200 text-white rounded-full text-lg font-medium hover:opacity-90 transition">
-                        {isLoginMode ? ("Ingresar") : ("Crear Cuenta")}
-                    </button>
-
-                    {/* switch mode link */}
-                    <p className="text-center text-gray-600">{isLoginMode ? "¿No tienes una cuenta? Registrarse" : "¿Ya tienes una cuenta? Iniciar sesión"}
-                        <a href="#" onClick={() => setIsLoginMode(!isLoginMode)} className="text-cyan-800 hover:underline">
-                            {isLoginMode ? " Registrarse" : " Iniciar sesión"}
-                        </a>
-                    </p>
-                </form>
+          {/* Feedback */}
+          {error && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800">
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             </div>
-            {openModal && <ResetPasswordModal onClose={() => setOpenModal(false)} />}
+          )}
+          {success && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800">
+              <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
+            </div>
+          )}
+
+          {/* Formulario */}
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-1.5">
+                Usuario
+              </label>
+              <input
+                name="username"
+                type="text"
+                placeholder="Tu nombre de usuario"
+                required
+                autoComplete="username"
+                className="input-base"
+              />
+            </div>
+
+            {!isLoginMode && (
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-1.5">
+                  Correo
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="correo@ejemplo.com"
+                  required
+                  autoComplete="email"
+                  className="input-base"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-1.5">
+                Contraseña
+              </label>
+              <input
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                autoComplete={isLoginMode ? "current-password" : "new-password"}
+                className="input-base"
+              />
+            </div>
+
+            {isLoginMode && (
+              <button
+                type="button"
+                onClick={() => setOpenModal(true)}
+                className="text-sm text-brand-500 hover:text-brand-700 dark:text-brand-300 dark:hover:text-brand-200 text-left hover:underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full mt-2"
+            >
+              {loading ? "Cargando..." : isLoginMode ? "Ingresar" : "Crear cuenta"}
+            </button>
+
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+              {isLoginMode ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}
+              {" "}
+              <button
+                type="button"
+                onClick={() => { setIsLoginMode(!isLoginMode); setError(""); setSuccess(""); }}
+                className="text-brand-500 dark:text-brand-300 font-semibold hover:underline"
+              >
+                {isLoginMode ? "Regístrate" : "Inicia sesión"}
+              </button>
+            </p>
+          </form>
         </div>
-    );
-};
+      </div>
+
+      {openModal && <ResetPasswordModal onClose={() => setOpenModal(false)} />}
+    </div>
+  );
+}

@@ -1,68 +1,59 @@
-import React, { useEffect } from "react";
 import { clients } from "../data/clients";
-import useDarkMode from "../components/useDarkMode";
 import { FaStar } from "react-icons/fa";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
-const Clients = () => {
-  useEffect(() => {
-    AOS.init({
-      offset: 200,
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-    });
-  }, []);
-
-  const { darkMode } = useDarkMode();
-
+export default function Clients() {
   return (
-    <div className={darkMode ? "dark bg-[#0b2236]" : "light bg-transparent"}>
+    <div className="bg-surface-light dark:bg-surface-dark">
       <section
         id="testimonials"
-        className="lg:w-[95%] w-full h-fit m-auto bg-cover bg-center rounded-xl flex justify-center flex-col items-start lg:px-20 px-6 py-20 gap-20"
+        className="w-[95%] mx-auto px-6 md:px-12 py-20 flex flex-col gap-12"
       >
-        <div className="flex flex-col justify-center items-start gap-4">
-          <h1 data-aos="zoom-in" className="text-[#2d2c55] dark:text-white font-semibold">
-            NUESTROS CLIENTES
-          </h1>
-          <h1 className=" text-black dark:text-white text-[40px] font-semibold leading-10">
-            Estas son la opiniones <br /> de nuestros clientes
-          </h1>
+        <div className="flex flex-col gap-3">
+          <p data-aos="zoom-in" className="section-label">Nuestros clientes</p>
+          <h2 data-aos="zoom-in" data-aos-delay="150" className="section-title">
+            Lo que dicen quienes nos eligieron
+          </h2>
         </div>
-        <div
-          id="clients-box"
-          className="grid lg:grid-cols-3 grid-cols-1 justify-center items-center gap-8 w-full"
-        >
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {clients.map((item, index) => (
             <div
+              key={index}
               data-aos="zoom-in"
               data-aos-delay="200"
-              key={index}
-              className="bg-white dark:bg-gray-900 hover:bg-[#71BFD1] cursor-pointer p-12 flex flex-col justify-center gap-6 rounded-xl w-full">
-                <div className="flex justify-start items-center w-full gap-4">
-                  <img src={item.image} alt="" className="w-[70px] h-[70px] rounded-full object-cover transform hover-scale-110 transition-transform duration-300" />
-                  <div className="flex flex-col justify-center items-start gap-1">
-                    <h1 className="text-xl text-black font-semibold dark:text-white">{item.name}</h1>
-                    <h1 className="text-slate-600 dark:text-slate-400">{item.text}</h1>
-                  </div>
-                </div>
-                <p className="text-md text-justify text-slate-600 dark:text-white">{item.feedback}</p>
-
-                <div className="flex justify-start items-start gap-2 w-full">
-                  <FaStar className="size-4 text-yellow-400" />
-                  <FaStar className="size-4 text-yellow-400" />
-                  <FaStar className="size-4 text-yellow-400" />
-                  <FaStar className="size-4 text-yellow-400" />
-                  <FaStar className="size-4 text-yellow-400" />
+              className="group card p-8 flex flex-col gap-5
+                         hover:bg-brand-300 dark:hover:bg-brand-700
+                         transition-all duration-300 cursor-pointer"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-14 h-14 rounded-full object-cover ring-2 ring-brand-300"
+                />
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white group-hover:text-white">
+                    {item.name}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">
+                    {item.text}
+                  </p>
                 </div>
               </div>
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90 leading-relaxed text-justify">
+                {item.feedback}
+              </p>
+
+              <div className="flex gap-1 mt-auto">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <FaStar key={i} className="size-4 text-yellow-400" />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
     </div>
   );
-};
-
-export default Clients;
+}

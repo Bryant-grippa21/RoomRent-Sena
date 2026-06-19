@@ -1,154 +1,103 @@
-import React, { useEffect } from "react";
-import useDarkMode from "../components/useDarkMode";
-import cityimg from "../assets/images/city.png";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import cityimg from "../assets/images/city.png";
 
-const Home = () => {
-  useEffect(() => {
-    AOS.init({
-      offset: 200,
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-    });
-  }, []);
+const localidades = [
+  "Antonio Nariño","Barrios Unidos","Bosa","Chapinero","Engativá",
+  "Fontibón","Kennedy","Usaquén","Santa Fe","San Cristóbal","Usme",
+  "Tunjuelito","Suba","Teusaquillo","Los Mártires","Puente Aranda",
+  "Rafael Uribe Uribe","Ciudad Bolívar","La Candelaria",
+];
 
-  const { darkMode } = useDarkMode();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.state?.scrollTo) {
-      const section = document.getElementById(location.state.scrollTo);
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [location]);
+export default function Home() {
   const navigate = useNavigate();
-
   const [locationFilter, setLocationFilter] = useState("");
   const [type, setType] = useState("");
   const [price, setPrice] = useState("");
 
   const handleSearch = () => {
-    navigate(
-      `/properties?location=${locationFilter}&type=${type}&price=${price}`,
-    );
+    navigate(`/properties?location=${locationFilter}&type=${type}&price=${price}`);
   };
 
   return (
-    <>
-      <div className={`${darkMode ? "dark bg-[#0b2236]" : "light bg-white"}`}>
-        <section
-          id="home"
-          className="w-[95%] h-[600px] m-auto bg-cover bg-center rounded-xl flex justify-center flex-col items-start lg:px-28 px-10 gap-7 z-20"
-          style={{ backgroundImage: `url(${cityimg})` }}
-        >
+    <div className="bg-surface-light dark:bg-surface-dark">
+
+      {/* Hero */}
+      <section
+        id="home"
+        className="w-[95%] mx-auto h-[580px] md:h-[640px] bg-cover bg-center rounded-2xl mt-4
+                   flex flex-col justify-center items-start px-8 md:px-20 lg:px-28 gap-6"
+        style={{ backgroundImage: `url(${cityimg})` }}
+      >
+        <div className="max-w-xl">
           <h1
             data-aos="zoom-in"
-            className="text-6xl font-semibold text-white lg:pr-[500px] pr-0 lg:leading-[70px] leading-[60px]"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
           >
-            Encuentra tu proximo hogar en Bogotá
+            Encuentra tu próximo hogar en Bogotá
           </h1>
-          <p
-            data-aos="zoom-in"
-            className="text-white text-xl lg:pr-[500px] pr-0"
-          >
-            Cada rincón de Bogotá guarda un nuevo comienzo, una historia
-            esperando ser vivida. Encuentra el tuyo hoy y da el siguiente paso
-            hacia el hogar que te hará sentir en el lugar correcto.
+          <p data-aos="zoom-in" data-aos-delay="150" className="text-white/90 text-lg mt-4">
+            Cada rincón de Bogotá guarda un nuevo comienzo. Encuentra el tuyo hoy.
           </p>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      {/* Form Section */}
-
-      <div
-        className={`${darkMode ? "dark bg-[#0b2236]" : "light bg-transparent"} z-10`}
-      >
+      {/* Buscador */}
+      <div className="relative z-10">
         <div
           data-aos="zoom-in"
-          id="form"
-          className={`${darkMode ? "dark bg-[#65727c]" : "light bg-white"} lg:w-[70%] w-full m-auto grid lg:grid-cols-4 grid-cols-1 justify-center items-center gap-6 p-8 rounded-xl -mt-14`}
+          className="card w-[95%] md:w-[80%] lg:w-[70%] mx-auto
+                     grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 -mt-12 shadow-lg"
         >
-          <div className="w-full">
-            <h1 className="text-black font-semibold dark:text-white">
-              LOCALIDAD
-            </h1>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-1.5">
+              Localidad
+            </label>
             <select
+              value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="bg-white p-2 border-b w-full mt-2 border-[#c9c7c1] text-gray-500 text-md rounded-xl"
+              className="select-base"
             >
-              <option value="Localidad" disabled selected>
-                Selecciona Localidad
-              </option>
-              <option value="Option1">Antonio Nariño</option>
-              <option value="Option2">Barrios Unidos</option>
-              <option value="Option3">Bosa</option>
-              <option value="Option4">Chapinero</option>
-              <option value="Option5">Engativá</option>
-              <option value="Option6">Fontibón</option>
-              <option value="Option7">Kennedy</option>
-              <option value="Option8">Usaquén</option>
-              <option value="Option9">Santa Fe</option>
-              <option value="Option10">San Cristobal</option>
-              <option value="Option11">Usme</option>
-              <option value="Option12">Tunjuelito</option>
-              <option value="Option13">Suba</option>
-              <option value="Option14">Teusaquillo</option>
-              <option value="Option15">Los Mártires</option>
-              <option value="Option16">Puente Aranda</option>
-              <option value="Option17">Rafael Uribe Uribe</option>
-              <option value="Option18">Ciudad Bolívar</option>
-              <option value="Option19">La Candelaria</option>
+              <option value="">Selecciona localidad</option>
+              {localidades.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
             </select>
           </div>
-          <div className="w-full">
-            <h1 className="text-black font-semibold dark:text-white">TIPO</h1>
-            <select
-              onChange={(e) => setType(e.target.value)}
-              className="bg-white p-2 border-b w-full mt-2 border-[#c9c7c1] text-gray-500 text-md rounded-xl"
-            >
-              <option value="" disabled selected>
-                Selecciona Tipo
-              </option>
-              <option value="Option1">Casa</option>
-              <option value="Option2">Apartamento</option>
-              <option value="Option3">Habitación</option>
-              <option value="Option4">Roomie</option>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-1.5">
+              Tipo
+            </label>
+            <select value={type} onChange={(e) => setType(e.target.value)} className="select-base">
+              <option value="">Selecciona tipo</option>
+              <option value="Casa">Casa</option>
+              <option value="Apartamento">Apartamento</option>
+              <option value="Habitación">Habitación</option>
+              <option value="Roomie">Roomie</option>
             </select>
           </div>
-          <div className="w-full">
-            <h1 className="text-black font-semibold dark:text-white">PRECIO</h1>
-            <select
-              onChange={(e) => setPrice(e.target.value)}
-              className="bg-white p-2 border-b w-full mt-2 border-[#c9c7c1] text-gray-500 text-md rounded-xl"
-            >
-              <option value="Precio" disabled selected>
-                Selecciona Precio
-              </option>
-              <option value="0-500000">Menos de 500.000</option>
-              <option value="500000-1000000">De 500.000 a 1.000.000</option>
-              <option value="1000000-1500000">De 1.000.000 a 1.500.000</option>
-              <option value="1500000+">Más de 1.500.000</option>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-1.5">
+              Precio
+            </label>
+            <select value={price} onChange={(e) => setPrice(e.target.value)} className="select-base">
+              <option value="">Selecciona precio</option>
+              <option value="0-500000">Menos de $500.000</option>
+              <option value="500000-1000000">$500.000 – $1.000.000</option>
+              <option value="1000000-1500000">$1.000.000 – $1.500.000</option>
+              <option value="1500000+">Más de $1.500.000</option>
             </select>
           </div>
-          <div className="w-full">
-            <button
-              onClick={handleSearch}
-              className="bg-[#71bFD1] dark:bg-[#71bFD1] hover:bg-[#0B2236] dark:hover:bg-white dark:hover:text-black text-lg p-4 w-full text-white font-semibold rounded-xl cursor-pointer transform hover:scale-110 transition-transform duration-300"
-            >
+
+          <div className="flex items-end">
+            <button onClick={handleSearch} className="btn-primary w-full">
               Buscar
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-export default Home;
+}

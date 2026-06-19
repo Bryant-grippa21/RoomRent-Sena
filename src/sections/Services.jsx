@@ -1,63 +1,50 @@
-import React, { useEffect } from "react";
 import { services } from "../data/services";
-import useDarkMode from "../components/useDarkMode";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
-const Services = () => {
-  useEffect(() => {
-    AOS.init({
-      offset: 200,
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-    });
-  }, []);
-
-  const { darkMode } = useDarkMode();
+export default function Services() {
   return (
-    <div
-      className={`${darkMode ? "dark bg-[#0b2236]" : "light bg-transparent"} pb-20`}
-    >
+    <div className="bg-surface-light dark:bg-surface-dark py-4">
       <section
         id="services"
-        className={`${
-          darkMode ? "dark bg-[#65727c]" : "light bg-[#cadffb]"
-        } lg:w-[95%] w-full h-fit m-auto rounded-xl flex flex-col justify-center items-start lg:px-20 px-6 py-20 gap-10`}
+        className="bg-brand-100 dark:bg-card-dark w-[95%] mx-auto rounded-2xl
+                   px-6 md:px-12 lg:px-16 py-16 flex flex-col gap-12"
       >
-        <div className="flex flex-col justify-center items-start gap-4">
-          <h1 data-aos="zoom-in" className="text-[#2d2c55] dark:text-white font-semibold">
-            NUESTROS SERVICIOS
-          </h1>
-          <h1
-            data-aos="zoom-in"
-            className="text-black text-[40px] font-semibold leading-10 dark:text-white"
-          >
-            Nuestros mejores servicios
-          </h1>
+        <div className="flex flex-col gap-3">
+          <p data-aos="zoom-in" className="section-label">Nuestros servicios</p>
+          <h2 data-aos="zoom-in" data-aos-delay="150" className="section-title">
+            Los mejores servicios para ti
+          </h2>
         </div>
-        <div
-          id="service-box"
-          className=" grid lg:grid-cols-3 grid-cols-1 justify-center items-center gap-8"
-        >
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <div
+              key={index}
               data-aos="zoom-in"
               data-aos-delay="200"
-              key={index}
-              className="bg-white dark:bg-black h-[350px] px-8 py-16 flex flex-col justify-center items-start gap-4 rounded-xl border-b-[5px] border-[#517399] hover:bg-[#71BFD1] cursor-pointer"
+              className="group card px-8 py-10 flex flex-col gap-4
+                         border-b-4 border-brand-500
+                         hover:bg-brand-300 dark:hover:bg-brand-700
+                         hover:border-brand-900 transition-all duration-300 cursor-pointer"
             >
-              <div className="p-6 rounded-full bg-[#bceeff]">
-                <service.icon className="text-[#0b2236] size-10 transform hover:scale-110 transition-transform duration-300 cursor-pointer" />
+              <div className="p-4 rounded-2xl bg-brand-100 dark:bg-brand-900/30 w-fit
+                              group-hover:bg-white/20 transition-colors duration-300">
+                <service.icon className="text-brand-900 dark:text-brand-300 size-8" />
               </div>
-              <h1 className=" text-black text-[22px] font-semibold dark:text-white">{service.title}</h1>
-              <p className="text-lg text-slate-700 dark:text-white">{service.desc}</p>
-              <button className="border-b-2 border-[#2d2c55] text-[#2d2c55] font-semibold dark:text-white">LEER MÁS</button>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-white">
+                {service.title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/90 leading-relaxed">
+                {service.desc}
+              </p>
+              <button className="text-sm font-semibold text-brand-600 dark:text-brand-300 group-hover:text-white
+                                 border-b-2 border-brand-600 dark:border-brand-300 group-hover:border-white
+                                 w-fit pb-0.5 transition-colors duration-200">
+                Leer más
+              </button>
             </div>
           ))}
         </div>
       </section>
     </div>
   );
-};
-export default Services;
+}

@@ -1,51 +1,64 @@
-import React, { useEffect } from "react";
-import useDarkMode from "../components/useDarkMode";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-const Contact = () => {
-  useEffect(() => {
-    AOS.init({
-      offset: 200,
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-    });
-  }, []);
-
-  const { darkMode } = useDarkMode();
-
+export default function Contact() {
   return (
-    <div
-      className={`${darkMode ? "dark bg-[#0b2236]" : "light bg-transparent"} pb-20`}
-    >
+    <div className="bg-surface-light dark:bg-surface-dark py-4 pb-20">
       <section
         id="contact"
-        className={`${
-          darkMode ? "dark bg-[#65727c]" : "light bg-[#cadffb]"
-        } lg:w-[95%] w-full h-fit m-auto rounded-xl grid lg:grid-cols-2 grid-cols-1 justify-center items-center lg:px-36 px-6 py-20 gap-10`}
+        className="bg-brand-100 dark:bg-card-dark w-[95%] mx-auto rounded-2xl
+                   px-6 md:px-12 lg:px-20 py-16
+                   grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
       >
-        <div
-          data-ao="zoom-in"
-          className="bg-white dark:bg-black p-10 flex flex-col justify-center items-start gap-4 rounded-xl"
-        >
-          <h1 className="text-2xl text-black font-semibold dark:text-white">
-            Envianos tu mensaje
-          </h1>
-          <input type="text" placeholder="Ingresa tu nombre completo" className="w-full px-6 py-3 border-2 border-gray-200 rounded-xl" />
-          <input type="email" placeholder="Registra un tu correo electronico" className="w-full px-6 py-3 border-2 border-gray-200 rounded-xl" />
-          <input type="number" placeholder="Registra tu numero de contacto" className="w-full px-6 py-3 border-2 border-gray-200 rounded-xl" />
-          <textarea name="" id="" cols="30" rows="5" placeholder="Ingresa tu mensaje aqui..." className="w-full px-6 py-3 border-2 border-gray-200 rounded-xl"></textarea>
-          <button className="bg-[#71bfd1] w-full text-md px-8 py-3 text-white font-semibold rounded-xl hover:bg-[#0b2236] cursor-pointer">ENVIAR MENSAJE</button>
+        {/* Formulario */}
+        <div className="card p-8 flex flex-col gap-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Envíanos tu mensaje
+          </h2>
+          <input
+            type="text"
+            placeholder="Nombre completo"
+            className="input-base"
+          />
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            className="input-base"
+          />
+          <input
+            type="tel"
+            placeholder="Número de contacto"
+            className="input-base"
+          />
+          <textarea
+            rows={4}
+            placeholder="Escribe tu mensaje aquí..."
+            className="input-base resize-none"
+          />
+          <button className="btn-primary w-full">
+            Enviar mensaje
+          </button>
         </div>
-        <div className="flex flex-col justify-center items-start gap-8 lg:p-20 p-6 ">
-          <h1 data-aos="zoom-in" data-aos-delay="300" className="text-[#2d2c55] text-[30px] dark:text-white" >¿Tienes dudas o quieres saber más?</h1>
-          <h1 data-aos="zoom-in" data-aos-delay="400" className="text-black text-[30px] font-semibold leading-10 dark:text-white">Escríbenos sin miedo, estamos aquí para ayudarte. Nos encanta escuchar nuevas ideas, resolver tus preguntas y acompañarte en cada paso de tu arriendo. ¡Tu mensaje es el inicio de una buena conversación!</h1>
 
+        {/* Texto informativo */}
+        <div className="flex flex-col gap-6 lg:px-6">
+          <p data-aos="zoom-in" className="section-label">Contáctanos</p>
+          <h2
+            data-aos="zoom-in"
+            data-aos-delay="200"
+            className="section-title"
+          >
+            ¿Tienes dudas o quieres saber más?
+          </h2>
+          <p
+            data-aos="zoom-in"
+            data-aos-delay="350"
+            className="text-gray-600 dark:text-gray-400 leading-relaxed"
+          >
+            Escríbenos sin miedo, estamos aquí para ayudarte. Nos encanta
+            escuchar nuevas ideas, resolver tus preguntas y acompañarte en cada
+            paso de tu arriendo. ¡Tu mensaje es el inicio de una buena
+            conversación!
+          </p>
         </div>
       </section>
     </div>
   );
-};
-
-export default Contact;
+}

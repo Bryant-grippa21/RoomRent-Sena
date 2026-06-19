@@ -1,26 +1,88 @@
+import { useState } from "react";
+import { FaXmark } from "react-icons/fa6";
+import { authApi } from "../services/api";
+
 export default function ResetPasswordModal({ onClose }) {
-    return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-sm">
-                <h3 className="text-xl font-semibold mb-3">Recuperar contraseña</h3>
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
-                <input
-                    type="email"
-                    placeholder="Correo"
-                    className="w-full p-2 border rounded mb-4"
-                />
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      await authApi.resetPasswordInit(email);
+      setSent(true);
+    } catch {
+      setError("No pudimos enviar el correo. Verifica la dirección.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 mb-3">
-                    Enviar enlace
-                </button>
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm p-8">
 
-                <button
-                    className="w-full bg-gray-300 py-2 rounded hover:bg-gray-400"
-                    onClick={onClose}
-                >
-                    Cancelar
-                </button>
-            </div>
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              Recuperar contraseña
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Te enviaremos un enlace a tu correo.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <FaXmark size={16} />
+          </button>
         </div>
-    );
+
+        {sent ? (
+          <div className="text-center py-2">
+            <p className="text-green-600 dark:text-green-400 font-medium text-sm">
+              ✓ Enlace enviado. Revisa tu correo.
+            </p>
+            <button type="button" onClick={onClose} className="btn-primary w-full mt-6">
+              Cerrar
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {error && (
+              <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800">
+                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              </div>
+            )}
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-1.5">
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="correo@ejemplo.com"
+                required
+                className="input-base"
+              />
+            </div>
+            <button type="submit" disabled={loading} className="btn-primary w-full">
+              {loading ? "Enviando..." : "Enviar enlace"}
+            </button>
+            <button type="button" onClick={onClose} className="btn-ghost w-full">
+              Cancelar
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
 }
