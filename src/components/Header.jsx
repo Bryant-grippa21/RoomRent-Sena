@@ -38,7 +38,9 @@ export default function Header() {
 
   const mobileLinkCls =
     "block text-sm font-medium px-4 py-3 rounded-md " +
-    "text-zinc-300 hover:text-white hover:bg-zinc-800 " +
+    "text-stone-600 dark:text-zinc-300 " +
+    "hover:text-stone-900 dark:hover:text-white " +
+    "hover:bg-stone-50 dark:hover:bg-zinc-800 " +
     "transition-colors duration-150 cursor-pointer";
 
   const renderItem = ({ label, path, type }, mobile = false) => {
@@ -133,10 +135,10 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-zinc-900 border-t border-zinc-800">
+        <div className="lg:hidden bg-white dark:bg-zinc-900 border-t border-stone-100 dark:border-zinc-800 shadow-lg">
           <div className="px-3 py-3 flex flex-col gap-0.5">
             {navItems.map((item) => renderItem(item, true))}
-            <div className="mt-3 pt-3 border-t border-zinc-800">
+            <div className="mt-3 pt-3 border-t border-stone-100 dark:border-zinc-800">
               {user ? (
                 <div className="flex items-center justify-between px-1">
                   <span className="text-xs text-zinc-400 truncate">{user.firstName || user.login}</span>

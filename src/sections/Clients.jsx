@@ -3,7 +3,7 @@ import { FaStar } from "react-icons/fa";
 
 export default function Clients() {
   return (
-    <section id="testimonials" className="bg-white dark:bg-zinc-900 w-full py-24">
+    <section id="testimonials" className="section-alt w-full py-24">
       <div className="container-page flex flex-col gap-14">
 
         <div className="flex flex-col gap-3 max-w-xl">

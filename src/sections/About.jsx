@@ -2,7 +2,7 @@ import aboutimg from "../assets/images/sala.jpg";
 
 export default function About() {
   return (
-    <section id="about" className="bg-white dark:bg-zinc-900 w-full py-24">
+    <section id="about" className="section-alt w-full py-24">
       <div className="container-page grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
         <div data-aos="fade-right">

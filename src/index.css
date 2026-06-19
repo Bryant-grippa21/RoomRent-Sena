@@ -14,13 +14,15 @@
   --color-brand-800: #92400e;
   --color-brand-900: #78350f;
 
-  /* Superficies */
-  --color-surface-light: #f5f5f4;   /* stone-100 */
-  --color-surface-dark:  #18181b;   /* zinc-900  */
-  --color-card-light:    #ffffff;
-  --color-card-dark:     #27272a;   /* zinc-800  */
-  --color-nav-light:     #ffffff;
-  --color-nav-dark:      #18181b;
+  /* Superficies — jerarquía cálida de 3 niveles para modo día */
+  --color-surface-light:     #f2efec;   /* stone-100 cálido — base de página */
+  --color-surface-alt-light: #faf9f7;   /* stone-50 cálido  — secciones alternas */
+  --color-surface-dark:      #18181b;   /* zinc-900  */
+  --color-surface-alt-dark:  #1f1f23;   /* zinc-900/90 — secciones alternas dark */
+  --color-card-light:        #ffffff;
+  --color-card-dark:         #27272a;   /* zinc-800  */
+  --color-nav-light:         #ffffff;
+  --color-nav-dark:          #18181b;
 
   /* Fuente */
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -98,8 +100,13 @@ h1, h2, h3, h4 {
 /* ── Card — shadow-md real ── */
 .card {
   @apply bg-card-light dark:bg-card-dark rounded-xl
-         shadow-md dark:shadow-none
-         border border-stone-200/60 dark:border-zinc-700;
+         shadow-sm dark:shadow-none
+         border border-stone-200 dark:border-zinc-700;
+}
+
+/* ── Superficie alternada — secciones blancas/claras ── */
+.section-alt {
+  @apply bg-surface-alt-light dark:bg-surface-alt-dark;
 }
 
 /* ── Hover elevación ── */
